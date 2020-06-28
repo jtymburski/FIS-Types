@@ -16,6 +16,15 @@ class XmlReader {
  * PUBLIC FUNCTIONS - STABLE, NON-VIRTUAL INTERFACE
  *============================================================================*/
 public:
+  /* Finds an element node from the current read location */
+  bool find(XmlData branch);
+
+  /* Is the reader started already and available? */
+  bool isStarted();
+
+  /* Jumps the reader back to the root element of the document */
+  bool jumpToRoot();
+
   /* Last date the data source was modified */
   std::string lastModifiedDate();
 
@@ -35,6 +44,15 @@ public:
  * PRIVATE FUNCTIONS - IMPLEMENTATION SPECIFIC, PURE VIRTUAL
  *============================================================================*/
 private:
+  /* Finds an element node from the current read location */
+  virtual bool findInSource(XmlData branch) = 0;
+
+  /* Is the reader started already and available? */
+  virtual bool isSourceAvailable() = 0;
+
+  /* Jumps the reader back to the root element of the document */
+  virtual bool jumpToRootInSource() = 0;
+
   /* Last date the data source was modified */
   virtual std::string lastModifiedDateFromSource() = 0;
 

@@ -11,6 +11,34 @@
  *============================================================================*/
 
 /**
+ * Finds an element node from the current read location.
+ * @param branch the XML data element path information to locate
+ * @return true if the path was found and the read pointer was moved
+ */
+bool XmlReader::find(XmlData branch)
+{
+  return findInSource(branch);
+}
+
+/**
+ * Checks if the reader has been started already and is available.
+ * @return true if start() has been called and the source is still available
+ */
+bool XmlReader::isStarted()
+{
+  return isSourceAvailable();
+}
+
+/**
+ * Jumps the reader reference location back to the root element of the document.
+ * @return true if the reader is back at the root of the source for the next read()
+ */
+bool XmlReader::jumpToRoot()
+{
+  return jumpToRootInSource();
+}
+
+/**
  * Extracts last date that the data source was modified before beginning this read.
  * Calling start() is required to access the date field.
  * @return the date formatted as a string
