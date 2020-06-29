@@ -11,8 +11,11 @@
  *============================================================================*/
 
 /**
- * Finds an element node from the current read location.
- * @param branch the XML data element path information to locate
+ * Finds an element node from the current read location. For instance, if the
+ * current tree location is at "parent.node" and the branch requested is "foo.bar", it will
+ * search for "parent.node.foo.bar" in the overall document.
+ * @param branch the XML data wrapper which defines the child branch to find in the tree.
+ *               Using the example in the description, this would just contain "foo.bar"
  * @return true if the path was found and the read pointer was moved
  */
 bool XmlReader::find(XmlData branch)
