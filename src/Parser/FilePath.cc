@@ -4,6 +4,7 @@
  * File path parsing and processing functionality shared across implementations.
  */
 #include "Parser/FilePath.h"
+using namespace core;
 
 /*=============================================================================
  * PRIVATE STATIC FUNCTIONS

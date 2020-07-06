@@ -4,16 +4,19 @@
  * Enumerator defining an animation sequence and how it should transition
  * through a given flow.
  */
-#ifndef SEQUENCE_H
-#define SEQUENCE_H
+#ifndef CORE_SEQUENCE_H
+#define CORE_SEQUENCE_H
 
 #include <cstdint>
 
-enum class Sequence : std::uint8_t
+namespace core
 {
-  DEFAULT,
-  FORWARD,
-  REVERSE
+  enum class Sequence : std::uint8_t
+  {
+    DEFAULT,
+    FORWARD,
+    REVERSE
+  };
 };
 
-#endif // SEQUENCE_H
+#endif // CORE_SEQUENCE_H

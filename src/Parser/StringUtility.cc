@@ -5,6 +5,7 @@
  * requirements.
  */
 #include "Parser/StringUtility.h"
+using namespace core;
 
 /*=============================================================================
  * PUBLIC STATIC FUNCTIONS

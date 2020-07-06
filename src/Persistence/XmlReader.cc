@@ -5,6 +5,7 @@
  * generic data source as pure C++ making no library assumptions.
  */
 #include "Persistence/XmlReader.h"
+using namespace core;
 
 /*=============================================================================
  * PUBLIC FUNCTIONS - STABLE, NON-VIRTUAL INTERFACE

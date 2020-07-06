@@ -3,18 +3,21 @@
  *
  * Enumerator defining a data type classification for a generic storage element.
  */
-#ifndef DATATYPE_H
-#define DATATYPE_H
+#ifndef CORE_DATATYPE_H
+#define CORE_DATATYPE_H
 
 #include <cstdint>
 
-enum class DataType : std::uint8_t
+namespace core
 {
-  NONE    = 0,
-  BOOLEAN = 1,
-  INTEGER = 2,
-  FLOAT   = 3,
-  STRING  = 4
+  enum class DataType : std::uint8_t
+  {
+    NONE    = 0,
+    BOOLEAN = 1,
+    INTEGER = 2,
+    FLOAT   = 3,
+    STRING  = 4
+  };
 };
 
-#endif // DATATYPE_H
+#endif // CORE_DATATYPE_H

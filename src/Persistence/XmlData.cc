@@ -5,6 +5,7 @@
  * A single line represents the full element tree branch of a single endpoint.
  */
 #include "Persistence/XmlData.h"
+using namespace core;
 
 /*============================================================================
  * CONSTRUCTORS / DESTRUCTORS
