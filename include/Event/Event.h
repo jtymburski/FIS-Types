@@ -39,7 +39,7 @@ namespace core
     int32_t getSoundId() const;
 
     /* Returns the event type classification of the implementation */
-    virtual EventType getType() = 0;
+    virtual EventType getType() const = 0;
 
     /* Returns if the event will only trigger once */
     bool isOneShot() const;

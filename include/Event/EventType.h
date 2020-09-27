@@ -14,6 +14,7 @@ namespace core
   enum class EventType : std::uint8_t
   {
     NONE,
+    ITEMGIVE,
     ITEMTAKE
   };
 };
