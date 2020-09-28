@@ -15,7 +15,8 @@ namespace core
   {
     NONE,
     ITEMGIVE,
-    ITEMTAKE
+    ITEMTAKE,
+    MAPSWITCH
   };
 };
 
