@@ -18,7 +18,8 @@ namespace core
     ITEMGIVE,
     ITEMTAKE,
     MAPSWITCH,
-    MULTIPLE
+    MULTIPLE,
+    NOTIFICATION
   };
 };
 
