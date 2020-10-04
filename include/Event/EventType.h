@@ -17,7 +17,8 @@ namespace core
     BATTLESTART,
     ITEMGIVE,
     ITEMTAKE,
-    MAPSWITCH
+    MAPSWITCH,
+    MULTIPLE
   };
 };
 
