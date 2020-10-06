@@ -19,7 +19,8 @@ namespace core
     ITEMTAKE,
     MAPSWITCH,
     MULTIPLE,
-    NOTIFICATION
+    NOTIFICATION,
+    PROPERTY
   };
 };
 
