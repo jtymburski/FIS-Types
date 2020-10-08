@@ -21,7 +21,8 @@ namespace core
     MULTIPLE,
     NOTIFICATION,
     PROPERTY,
-    SOUND
+    SOUND,
+    TELEPORT
   };
 };
 
