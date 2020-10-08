@@ -20,7 +20,8 @@ namespace core
     MAPSWITCH,
     MULTIPLE,
     NOTIFICATION,
-    PROPERTY
+    PROPERTY,
+    SOUND
   };
 };
 
