@@ -22,7 +22,11 @@ namespace core
     NOTIFICATION,
     PROPERTY,
     SOUND,
-    TELEPORT
+    TELEPORT,
+    TRIGGERIO,
+    UNLOCKIO,
+    UNLOCKTHING,
+    UNLOCKTILE
   };
 };
 
