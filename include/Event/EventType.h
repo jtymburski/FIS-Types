@@ -15,6 +15,7 @@ namespace core
   {
     NONE,
     BATTLESTART,
+    CONVERSATION,
     ITEMGIVE,
     ITEMTAKE,
     MAPSWITCH,
