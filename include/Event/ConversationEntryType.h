@@ -13,7 +13,8 @@ namespace core
 {
   enum class ConversationEntryType : std::uint8_t
   {
-    NONE
+    NONE,
+    TEXT
   };
 };
 
