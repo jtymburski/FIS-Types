@@ -53,7 +53,6 @@ std::string ConversationEntryText::getMessage() const
   return message;
 }
 
-/* Returns the thing ID that is presenting the message */
 /**
  * Returns the thing ID that is presenting the message. If set to {@link #kINITIATING_THING_ID},
  * it will be set to use the initiating (event source) thing.

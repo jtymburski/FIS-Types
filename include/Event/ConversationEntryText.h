@@ -43,6 +43,9 @@ namespace core
     /* Special ID for the initiating thing (event source) */
     const static int32_t kINITIATING_THING_ID = -1;
 
+  /*=============================================================================
+   * PUBLIC FUNCTIONS
+   *============================================================================*/
   public:
     /* Returns the delay time for the message to be displayed, in milliseconds */
     uint32_t getDelayMilliseconds() const;
