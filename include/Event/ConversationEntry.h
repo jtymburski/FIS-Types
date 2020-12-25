@@ -39,10 +39,10 @@ namespace core
     void deleteNextEntry(uint8_t index);
 
     /* Returns a single entry following this entry at the given index in the vector */
-    ConversationEntry& getNextEntry(uint8_t index);
+    ConversationEntry& getNextEntry(uint8_t index) const;
 
     /* Returns the number of next entries linked to this entry in the vector */
-    uint8_t getNextEntryCount();
+    uint8_t getNextEntryCount() const;
 
     /* Returns the entry type classification of the implementation */
     virtual ConversationEntryType getType() const = 0;

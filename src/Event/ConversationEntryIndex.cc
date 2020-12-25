@@ -10,7 +10,7 @@ using namespace core;
 
 /* Constant Implementation - see header file for descriptions */
 const char ConversationEntryIndex::kINDEX_GROUP_DELIMITER = '.';
-const std::regex ConversationEntryIndex::kINDEX_STRING_FORMAT("^([1-9]\\d*\\.)*[1-9]\\d*$");
+const std::regex ConversationEntryIndex::kINDEX_STRING_FORMAT("^1(\\.[1-9]\\d*)*$");
 
 /*=============================================================================
  * CONSTRUCTORS / DESTRUCTORS
@@ -45,29 +45,39 @@ ConversationEntryIndex::ConversationEntryIndex(std::string index_str)
  * Total number of group values in the index address.
  * @return group count
  */
-uint16_t ConversationEntryIndex::groupCount()
+uint16_t ConversationEntryIndex::groupCount() const
 {
   return groups.size();
 }
 
 /**
- * Integer value of a single group in the index address.
+ * Integer value of a single group in the index address, as a 0..n value from a 1..n internally
+ * stored value.
  * @param group_index relative index in the address. 0 is first value, 1 is second, ...
  * @return group value. Will throw {@link std::out_of_range} if index is larger than count
  */
-uint8_t ConversationEntryIndex::groupValue(uint16_t group_index)
+uint8_t ConversationEntryIndex::groupValue(uint16_t group_index) const
 {
   if(group_index >= groups.size())
     throw std::out_of_range("Group index=" + std::to_string(group_index) +
                             " is out of range in ConversationEntryIndex::groupValue()");
-  return groups.at(group_index);
+  return groups.at(group_index) - 1;
+}
+
+/**
+ * Returns if the index address references the root conversation entry.
+ * @return TRUE if this references the root
+ */
+bool ConversationEntryIndex::isRoot() const
+{
+  return groupCount() == 1;
 }
 
 /**
  * Converts the index to a serialized string.
  * @return string address, matching format {#kINDEX_STRING_FORMAT}
  */
-std::string ConversationEntryIndex::toString()
+std::string ConversationEntryIndex::toString() const
 {
   std::string index_str;
 

@@ -8,6 +8,7 @@
 #define CORE_CONVERSATION_H
 
 #include "Event/ConversationEntry.h"
+#include "Event/ConversationEntryIndex.h"
 #include "Event/ConversationEntryNone.h"
 
 namespace core
@@ -15,6 +16,9 @@ namespace core
   class Conversation
   {
   public:
+    /* Constructor function */
+    Conversation();
+
     /* Destructor function */
     ~Conversation();
 
@@ -23,14 +27,44 @@ namespace core
     ConversationEntry* root_entry = new ConversationEntryNone();
 
   /*=============================================================================
+   * PRIVATE FUNCTIONS
+   *============================================================================*/
+  private:
+    /* Create the first entry, if one doesn't exist */
+    void createFirstEntry();
+
+    /* Recursive entry fetch to traverse the tree and return the entry at the index */
+    ConversationEntry& getEntry(ConversationEntry& previous_entry,
+                                const ConversationEntryIndex& index,
+                                uint16_t group_max, uint16_t group = 0) const;
+
+    /* Recursive entry fetch to traverse the tree and return the entry at the index or create it */
+    ConversationEntry& getOrAddEntry(ConversationEntry& filler_entry,
+                                     ConversationEntry& previous_entry,
+                                     const ConversationEntryIndex& index,
+                                     uint16_t group_max, uint16_t group = 0) const;
+
+  /*=============================================================================
    * PUBLIC FUNCTIONS
    *============================================================================*/
   public:
-    /* Returns the top level, root conversation entry */
-    ConversationEntry& getRootEntry();
+    /* Deletes a single entry at the index in the conversation tree */
+    void deleteEntry(const ConversationEntryIndex& index);
 
-    /* Sets the top level, root conversation entry */
-    void setRootEntry(ConversationEntry& entry);
+    /* Returns a single entry at the index in the conversation tree */
+    ConversationEntry& getEntry(const ConversationEntryIndex& index) const;
+
+    /* Returns the top level, first conversation entry */
+    ConversationEntry& getFirstEntry() const;
+
+    /* Returns if a single valid entry is at the index in the conversation tree */
+    bool hasEntry(const ConversationEntryIndex& index) const;
+
+    /* Inserts a single entry at the index in the conversation tree */
+    void insertEntry(const ConversationEntryIndex& index, ConversationEntry& entry);
+
+    /* Sets a single entry at the index in the conversation tree */
+    void setEntry(const ConversationEntryIndex& index, ConversationEntry& entry);
   };
 };
 

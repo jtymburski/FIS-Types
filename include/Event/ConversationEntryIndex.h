@@ -39,13 +39,16 @@ namespace core
    *============================================================================*/
   public:
     /* Number of groups in the index */
-    uint16_t groupCount();
+    uint16_t groupCount() const;
 
     /* Value of a single group in the index */
-    uint8_t groupValue(uint16_t group_index);
+    uint8_t groupValue(uint16_t group_index) const;
+
+    /* Does this index reference the root conversation entry */
+    bool isRoot() const;
 
     /* Converts the index to a serialized string */
-    std::string toString();
+    std::string toString() const;
   };
 };
 

@@ -66,7 +66,7 @@ void ConversationEntry::deleteNextEntry(uint8_t index)
  * @param index ordered vector location
  * @return entry reference at the given index. will throw exception if out of range
  */
-ConversationEntry& ConversationEntry::getNextEntry(uint8_t index)
+ConversationEntry& ConversationEntry::getNextEntry(uint8_t index) const
 {
   if(index >= next_entries.size())
     throw std::out_of_range("Conversation entry index=" + std::to_string(index) +
@@ -78,7 +78,7 @@ ConversationEntry& ConversationEntry::getNextEntry(uint8_t index)
  * Returns the number of next entries linked to this entry in the vector.
  * @return total number of next entries available
  */
-uint8_t ConversationEntry::getNextEntryCount()
+uint8_t ConversationEntry::getNextEntryCount() const
 {
   return next_entries.size();
 }
@@ -93,12 +93,24 @@ uint8_t ConversationEntry::getNextEntryCount()
 void ConversationEntry::insertNextEntry(uint8_t index, ConversationEntry& entry,
                                         ConversationEntry& filler_entry)
 {
-  padNextEntries(index, filler_entry);
-  next_entries.insert(next_entries.begin() + index, &entry);
+  // If this is inserting an index at first spot and there's only one currently in the entry,
+  // push the entry deeper in the tree instead of adding it as an option
+  if(index == 0 && getNextEntryCount() == 1)
+  {
+    entry.setNextEntry(index, getNextEntry(index), filler_entry);
+    next_entries.clear();
+    setNextEntry(index, entry, filler_entry);
+  }
+  // Otherwise, it should be just added to the existing entry
+  else
+  {
+    padNextEntries(index, filler_entry);
+    next_entries.insert(next_entries.begin() + index, &entry);
+  }
 }
 
 /**
- * Sets a single entry following this text entry at the given index in the vector. It will
+ * Sets a single entry following this entry at the given index in the vector. It will
  * insert copies of {@param filler_entry} in between if there is gaps in the vector.
  * @param index ordered vector location
  * @param entry new entry reference to insert or replace in the vector
