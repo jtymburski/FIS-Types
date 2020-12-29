@@ -61,39 +61,39 @@ namespace core
    *============================================================================*/
   private:
     /* Deletes all children element and data nodes beneath the current tree location */
-    bool deleteChildrenFromSource();
+    virtual bool deleteChildrenFromSource() = 0;
 
     /* Finds a lower child node from the current node location in the XML tree */
-    bool findInSource(XmlData branch);
+    virtual bool findInSource(XmlData branch) = 0;
 
     /* Is the writer started already and available? */
-    bool isSourceAvailable();
+    virtual bool isSourceAvailable() = 0;
 
     /* Jumps the writer back to the parent element of the current node */
-    bool jumpToParentInSource();
+    virtual bool jumpToParentInSource() = 0;
 
     /* Jumps the writer back to the root element of the document */
-    bool jumpToRootInSource();
+    virtual bool jumpToRootInSource() = 0;
 
     /* Sets up the writer to be able to write to the data source */
-    bool startWriteToSource();
+    virtual bool startWriteToSource() = 0;
 
     /* Stops and cleans up the writer after writing to the data source */
-    bool stopWriteToSource(bool save_changes);
+    virtual bool stopWriteToSource(bool save_changes) = 0;
 
     /* Writes a data node at the current tree location */
-    bool writeDataToSource(std::string element, DataType type, std::string data);
-    bool writeDataToSource(std::string element, bool data);
-    bool writeDataToSource(std::string element, float data);
-    bool writeDataToSource(std::string element, int data);
-    bool writeDataToSource(std::string element, std::string data);
-    bool writeDataToSource(std::string element, uint32_t data);
+    virtual bool writeDataToSource(std::string element, DataType type, std::string data) = 0;
+    virtual bool writeDataToSource(std::string element, bool data) = 0;
+    virtual bool writeDataToSource(std::string element, float data) = 0;
+    virtual bool writeDataToSource(std::string element, int data) = 0;
+    virtual bool writeDataToSource(std::string element, std::string data) = 0;
+    virtual bool writeDataToSource(std::string element, uint32_t data) = 0;
 
     /* Writes an element child at the current tree location */
-    bool writeElementToSource(std::string element, std::string key, std::string value);
+    virtual bool writeElementToSource(std::string element, std::string key, std::string value) = 0;
 
     /* Writes one or more elements at the current tree location */
-    bool writeElementsToSource(XmlData element_set);
+    virtual bool writeElementsToSource(XmlData element_set) = 0;
   };
 };
 

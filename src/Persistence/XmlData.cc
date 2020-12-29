@@ -130,6 +130,18 @@ bool XmlData::getDataBoolean(bool* success)
 }
 
 /**
+ * Returns the data stored in the class, if its a bool.
+ * @return the bool data available in the class
+ * @throws std::bad_cast if the data in the class is not a bool
+ */
+bool XmlData::getDataBooleanOrThrow()
+{
+  if(!isDataBoolean())
+    throw std::bad_cast();
+  return bool_data;
+}
+
+/**
  * Returns the data stored in the class, if it's a float.
  * @param success status if the data in the class is bool
  * @return the float data available in the class
@@ -138,6 +150,18 @@ float XmlData::getDataFloat(bool* success)
 {
   if(success != nullptr)
     *success = isDataFloat();
+  return float_data;
+}
+
+/**
+ * Returns the data stored in the class, if it's a float.
+ * @return the float data available in the class
+ * @throws std::bad_cast if the data in the class is not a float
+ */
+float XmlData::getDataFloatOrThrow()
+{
+  if(!isDataFloat())
+    throw std::bad_cast();
   return float_data;
 }
 
@@ -154,6 +178,18 @@ int XmlData::getDataInteger(bool* success)
 }
 
 /**
+ * Returns the data stored in the class, if it's an integer.
+ * @return the integer data available in the class
+ * @throws std::bad_cast if the data in the class is not a integer
+ */
+int XmlData::getDataIntegerOrThrow()
+{
+  if(!isDataInteger())
+    throw std::bad_cast();
+  return int_data;
+}
+
+/**
  * Returns the data stored in the class, if it's a string.
  * @param success status if the data in the class is bool
  * @return the string data available in the class
@@ -162,6 +198,18 @@ std::string XmlData::getDataString(bool* success)
 {
   if(success != nullptr)
     *success = isDataString();
+  return string_data;
+}
+
+/**
+ * Returns the data stored in the class, if it's a string.
+ * @return the string data available in the class
+ * @throws std::bad_cast if the data in the class is not a string
+ */
+std::string XmlData::getDataStringOrThrow()
+{
+  if(!isDataString())
+    throw std::bad_cast();
   return string_data;
 }
 

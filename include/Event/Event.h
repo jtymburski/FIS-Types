@@ -10,6 +10,8 @@
 #include <cstdint>
 
 #include "Event/EventType.h"
+#include "Persistence/XmlData.h"
+#include "Persistence/XmlWriter.h"
 
 namespace core
 {
@@ -28,6 +30,10 @@ namespace core
 
     /*------------------- Constants -----------------------*/
   public:
+    /* Data storage key names */
+    const static std::string kKEY_ONE_SHOT;
+    const static std::string kKEY_SOUND_ID;
+
     /* Unset sound action ID */
     const static int32_t kUNSET_SOUND_ID = -1;
 
@@ -43,6 +49,12 @@ namespace core
 
     /* Returns if the event will only trigger once */
     bool isOneShot() const;
+
+    /* Loads event data from the XML entry */
+    void load(XmlData data, int index);
+
+    /* Saves all event data into the XML writer */
+    void save(XmlWriter* writer) const;
 
     /* Sets if the event will only trigger once */
     void setOneShot(bool one_shot);

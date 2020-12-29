@@ -50,9 +50,13 @@ namespace core
     /* Get data calls - success holds if the data is actually set in the class */
     std::string getData(bool* success = nullptr);
     bool getDataBoolean(bool* success = nullptr);
+    bool getDataBooleanOrThrow();
     float getDataFloat(bool* success = nullptr);
+    float getDataFloatOrThrow();
     int getDataInteger(bool* success = nullptr);
+    int getDataIntegerOrThrow();
     std::string getDataString(bool* success = nullptr);
+    std::string getDataStringOrThrow();
 
     /* Returns the data type */
     DataType getDataType();
