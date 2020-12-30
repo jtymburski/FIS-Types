@@ -7,6 +7,14 @@
 #include "Event/EventBattleStart.h"
 using namespace core;
 
+/* Constant Implementation - see header file for descriptions */
+const std::string kKEY_EVENT_LOSE = "eventlose";
+const std::string kKEY_EVENT_WIN = "eventwin";
+const std::string kKEY_GAME_OVER_ON_LOSS = "losegg";
+const std::string kKEY_RESTORE_HEALTH = "restorehealth";
+const std::string kKEY_RESTORE_QD = "restoreqd";
+const std::string kKEY_TARGET_HIDE_ON_WIN = "windisappear";
+
 /*=============================================================================
  * CONSTRUCTORS / DESTRUCTORS
  *============================================================================*/
@@ -85,6 +93,59 @@ bool EventBattleStart::isQdRestored() const
 bool EventBattleStart::isTargetHiddenOnWin() const
 {
   return target_hide_on_win;
+}
+
+/**
+ * Loads event data from the XML entry.
+ * @param data single packet of XML data
+ * @param index current index within the line, represents which XML element is currently being read
+ * @throws std::bad_cast if any correctly named element doesn't match the type expected
+ */
+void EventBattleStart::load(XmlData data, int index)
+{
+  std::string element = data.getElement(index);
+
+  if(element == kKEY_EVENT_LOSE)
+    event_lose = EventPersistence::load(event_lose, data, index + 1);
+  else if(element == kKEY_EVENT_WIN)
+    event_win = EventPersistence::load(event_win, data, index + 1);
+  else if(element == kKEY_GAME_OVER_ON_LOSS)
+    setGameOverOnLoss(data.getDataBooleanOrThrow());
+  else if(element == kKEY_RESTORE_HEALTH)
+    setHealthRestored(data.getDataBooleanOrThrow());
+  else if(element == kKEY_RESTORE_QD)
+    setQdRestored(data.getDataBooleanOrThrow());
+  else if(element == kKEY_TARGET_HIDE_ON_WIN)
+    setTargetHiddenOnWin(data.getDataBooleanOrThrow());
+}
+
+/**
+ * Saves all event data into the XML writer.
+ * @param writer saving file handler interface
+ */
+void EventBattleStart::save(XmlWriter* writer) const
+{
+  if(event_lose->getType() != EventType::NONE)
+  {
+    writer->writeElement(kKEY_EVENT_LOSE);
+    EventPersistence::save(event_lose, writer);
+    writer->jumpToParent();
+  }
+  if(event_win->getType() != EventType::NONE)
+  {
+    writer->writeElement(kKEY_EVENT_WIN);
+    EventPersistence::save(event_win, writer);
+    writer->jumpToParent();
+  }
+
+  if(isGameOverOnLoss())
+    writer->writeData(kKEY_GAME_OVER_ON_LOSS, isGameOverOnLoss());
+  if(isHealthRestored())
+    writer->writeData(kKEY_RESTORE_HEALTH, isHealthRestored());
+  if(isQdRestored())
+    writer->writeData(kKEY_RESTORE_QD, isQdRestored());
+  if(isTargetHiddenOnWin())
+    writer->writeData(kKEY_TARGET_HIDE_ON_WIN, isTargetHiddenOnWin());
 }
 
 /**

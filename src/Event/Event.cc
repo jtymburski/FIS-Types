@@ -42,7 +42,6 @@ bool Event::isOneShot() const
 void Event::load(XmlData data, int index)
 {
   std::string element = data.getElement(index);
-  bool read_success;
 
   if(element == kKEY_ONE_SHOT)
     setOneShot(data.getDataBooleanOrThrow());

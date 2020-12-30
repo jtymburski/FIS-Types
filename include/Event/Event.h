@@ -30,12 +30,13 @@ namespace core
 
     /*------------------- Constants -----------------------*/
   public:
+    /* Unset sound action ID */
+    const static int32_t kUNSET_SOUND_ID = -1;
+
+  private:
     /* Data storage key names */
     const static std::string kKEY_ONE_SHOT;
     const static std::string kKEY_SOUND_ID;
-
-    /* Unset sound action ID */
-    const static int32_t kUNSET_SOUND_ID = -1;
 
   /*=============================================================================
    * PUBLIC FUNCTIONS
@@ -51,10 +52,10 @@ namespace core
     bool isOneShot() const;
 
     /* Loads event data from the XML entry */
-    void load(XmlData data, int index);
+    virtual void load(XmlData data, int index);
 
     /* Saves all event data into the XML writer */
-    void save(XmlWriter* writer) const;
+    virtual void save(XmlWriter* writer) const;
 
     /* Sets if the event will only trigger once */
     void setOneShot(bool one_shot);

@@ -7,10 +7,9 @@
 #ifndef CORE_EVENTBATTLESTART_H
 #define CORE_EVENTBATTLESTART_H
 
-#include <cstdint>
-
 #include "Event/Event.h"
 #include "Event/EventNone.h"
+#include "Event/EventPersistence.h"
 #include "Event/EventType.h"
 
 namespace core
@@ -40,6 +39,16 @@ namespace core
     /* If on win, should the initiating thing disappear? */
     bool target_hide_on_win = false;
 
+    /*------------------- Constants -----------------------*/
+  private:
+    /* Data storage key names */
+    const static std::string kKEY_EVENT_LOSE;
+    const static std::string kKEY_EVENT_WIN;
+    const static std::string kKEY_GAME_OVER_ON_LOSS;
+    const static std::string kKEY_RESTORE_HEALTH;
+    const static std::string kKEY_RESTORE_QD;
+    const static std::string kKEY_TARGET_HIDE_ON_WIN;
+
   /*=============================================================================
    * PUBLIC FUNCTIONS
    *============================================================================*/
@@ -64,6 +73,12 @@ namespace core
 
     /* Returns if on win, the initiating target should be removed from the map */
     bool isTargetHiddenOnWin() const;
+
+    /* Loads event data from the XML entry */
+    void load(XmlData data, int index) override;
+
+    /* Saves all event data into the XML writer */
+    void save(XmlWriter* writer) const override;
 
     /* Sets if on lose, the game should be over */
     void setGameOverOnLoss(bool game_over_on_loss);
