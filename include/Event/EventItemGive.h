@@ -9,12 +9,12 @@
 
 #include <cstdint>
 
-#include "Event/Event.h"
 #include "Event/EventType.h"
+#include "Event/ExecutableEvent.h"
 
 namespace core
 {
-  class EventItemGive : public Event
+  class EventItemGive : public ExecutableEvent
   {
   private:
     /* Percent chance the item will be given */
@@ -30,12 +30,29 @@ namespace core
     int32_t item_id = kUNSET_ITEM_ID;
 
     /*------------------- Constants -----------------------*/
+  private:
+    /* Data storage key names */
+    const static std::string kKEY_CHANCE;
+    const static std::string kKEY_DROP_IF_NO_ROOM;
+    const static std::string kKEY_ITEM_ID;
+    const static std::string kKEY_ITEM_COUNT;
+
   public:
     /* Max percent chance that can be set to give an item */
     const static uint8_t kMAX_CHANCE = 100;
 
     /* Unset item ID */
     const static int32_t kUNSET_ITEM_ID = -1;
+
+  /*=============================================================================
+   * PRIVATE FUNCTIONS
+   *============================================================================*/
+  private:
+    /* Loads event data from the XML entry, specific to the event type (sub-class) */
+    void loadForType(std::string element, XmlData data, int index) override;
+
+    /* Saves all event data into the XML writer, specific to the event type (sub-class) */
+    void saveForType(XmlWriter* writer) const override;
 
   /*=============================================================================
    * PUBLIC FUNCTIONS

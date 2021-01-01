@@ -9,12 +9,12 @@
 
 #include <cstdint>
 
-#include "Event/Event.h"
 #include "Event/EventType.h"
+#include "Event/ExecutableEvent.h"
 
 namespace core
 {
-  class EventItemTake : public Event
+  class EventItemTake : public ExecutableEvent
   {
   private:
     /* Total number of items to take from the inventory */
@@ -25,8 +25,22 @@ namespace core
 
     /*------------------- Constants -----------------------*/
 
+    /* Data storage key names */
+    const static std::string kKEY_ITEM_ID;
+    const static std::string kKEY_ITEM_COUNT;
+
     /* Unset item ID */
     const static int32_t kUNSET_ITEM_ID = -1;
+
+  /*=============================================================================
+   * PRIVATE FUNCTIONS
+   *============================================================================*/
+  private:
+    /* Loads event data from the XML entry, specific to the event type (sub-class) */
+    void loadForType(std::string element, XmlData data, int index) override;
+
+    /* Saves all event data into the XML writer, specific to the event type (sub-class) */
+    void saveForType(XmlWriter* writer) const override;
 
   /*=============================================================================
    * PUBLIC FUNCTIONS

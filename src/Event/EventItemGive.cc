@@ -7,6 +7,49 @@
 #include "Event/EventItemGive.h"
 using namespace core;
 
+/* Constant Implementation - see header file for descriptions */
+const std::string EventItemGive::kKEY_CHANCE = "chance";
+const std::string EventItemGive::kKEY_DROP_IF_NO_ROOM = "autodrop";
+const std::string EventItemGive::kKEY_ITEM_ID = "id";
+const std::string EventItemGive::kKEY_ITEM_COUNT = "count";
+
+/*=============================================================================
+ * PRIVATE FUNCTIONS
+ *============================================================================*/
+
+/**
+ * Loads event data from the XML entry, specific to the event type (sub-class).
+ * @param element XML key name for the {@link index} in the tree
+ * @param data single packet of XML data
+ * @throws std::bad_cast if any correctly named element doesn't match the type expected
+ */
+void EventItemGive::loadForType(std::string element, XmlData data, int)
+{
+  if(element == kKEY_CHANCE)
+    setChance(data.getDataIntegerOrThrow());
+  else if(element == kKEY_DROP_IF_NO_ROOM)
+    setDropIfNoRoom(data.getDataBooleanOrThrow());
+  else if(element == kKEY_ITEM_ID)
+    setItemId(data.getDataIntegerOrThrow());
+  else if(element == kKEY_ITEM_COUNT)
+    setItemCount(data.getDataIntegerOrThrow());
+}
+
+/**
+ * Saves all event data into the XML writer, specific to the event type (sub-class).
+ * @param writer saving file handler interface
+ */
+void EventItemGive::saveForType(XmlWriter* writer) const
+{
+  writer->writeData(kKEY_ITEM_ID, item_id);
+  writer->writeData(kKEY_ITEM_COUNT, item_count);
+
+  if(isDropIfNoRoom())
+    writer->writeData(kKEY_DROP_IF_NO_ROOM, drop_if_no_room);
+  if(chance < kMAX_CHANCE)
+    writer->writeData(kKEY_CHANCE, chance);
+}
+
 /*=============================================================================
  * PUBLIC FUNCTIONS
  *============================================================================*/
