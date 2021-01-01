@@ -1,12 +1,12 @@
 /**
- * @class EventPersistence
+ * @class PersistEvent
  *
  * Event persistence handling class. This handles the loading and saving of a singular event
  * for setting up the correct event object before executing the embedded saving/loading
  * of the KVs embedded within the object.
  */
-#ifndef CORE_EVENTPERSISTENCE_H
-#define CORE_EVENTPERSISTENCE_H
+#ifndef CORE_PERSISTEVENT_H
+#define CORE_PERSISTEVENT_H
 
 #include <map>
 
@@ -32,7 +32,7 @@
 
 namespace core
 {
-  class EventPersistence
+  class PersistEvent
   {
   /*------------------- Constants -----------------------*/
   private:
@@ -77,4 +77,4 @@ namespace core
   };
 };
 
-#endif // CORE_EVENTPERSISTENCE_H
+#endif // CORE_PERSISTEVENT_H

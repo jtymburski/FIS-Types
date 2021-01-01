@@ -5,29 +5,29 @@
  * for setting up the correct event object before executing the embedded saving/loading
  * of the KVs embedded within the object.
  */
-#include "Event/EventPersistence.h"
+#include "Event/PersistEvent.h"
 using namespace core;
 
 /* Constant Implementation - see header file for descriptions */
-const std::string kKEY_TYPE_BATTLESTART = "startbattle";
-const std::string kKEY_TYPE_CONVERSATION = "conversation";
-const std::string kKEY_TYPE_ITEMGIVE = "giveitem";
-const std::string kKEY_TYPE_ITEMTAKE = "takeitem";
-const std::string kKEY_TYPE_MAPSWITCH = "startmap";
-const std::string kKEY_TYPE_MULTIPLE = "multiple";
-const std::string kKEY_TYPE_NOTIFICATION = "notification";
-const std::string kKEY_TYPE_PROPERTY = "propertymod";
-const std::string kKEY_TYPE_SOUND = "justsound";
-const std::string kKEY_TYPE_TELEPORT = "teleportthing";
-const std::string kKEY_TYPE_TRIGGERIO = "triggerio";
-const std::string kKEY_TYPE_UNLOCKIO = "unlockio";
-const std::string kKEY_TYPE_UNLOCKTHING = "unlockthing";
-const std::string kKEY_TYPE_UNLOCKTILE = "unlocktile";
+const std::string PersistEvent::kKEY_TYPE_BATTLESTART = "startbattle";
+const std::string PersistEvent::kKEY_TYPE_CONVERSATION = "conversation";
+const std::string PersistEvent::kKEY_TYPE_ITEMGIVE = "giveitem";
+const std::string PersistEvent::kKEY_TYPE_ITEMTAKE = "takeitem";
+const std::string PersistEvent::kKEY_TYPE_MAPSWITCH = "startmap";
+const std::string PersistEvent::kKEY_TYPE_MULTIPLE = "multiple";
+const std::string PersistEvent::kKEY_TYPE_NOTIFICATION = "notification";
+const std::string PersistEvent::kKEY_TYPE_PROPERTY = "propertymod";
+const std::string PersistEvent::kKEY_TYPE_SOUND = "justsound";
+const std::string PersistEvent::kKEY_TYPE_TELEPORT = "teleportthing";
+const std::string PersistEvent::kKEY_TYPE_TRIGGERIO = "triggerio";
+const std::string PersistEvent::kKEY_TYPE_UNLOCKIO = "unlockio";
+const std::string PersistEvent::kKEY_TYPE_UNLOCKTHING = "unlockthing";
+const std::string PersistEvent::kKEY_TYPE_UNLOCKTILE = "unlocktile";
 
 /**
  * Event type enumerator from string key static map.
  */
-const std::map<std::string, EventType> kTYPE_FROM_STRING = {
+const std::map<std::string, EventType> PersistEvent::kTYPE_FROM_STRING = {
   { kKEY_TYPE_BATTLESTART,  EventType::BATTLESTART  },
   { kKEY_TYPE_CONVERSATION, EventType::CONVERSATION },
   { kKEY_TYPE_ITEMGIVE,     EventType::ITEMGIVE     },
@@ -47,7 +47,7 @@ const std::map<std::string, EventType> kTYPE_FROM_STRING = {
 /**
  * Event type enumerator to string key static map.
  */
-const std::map<EventType, std::string> kTYPE_TO_STRING = {
+const std::map<EventType, std::string> PersistEvent::kTYPE_TO_STRING = {
   { EventType::BATTLESTART,  kKEY_TYPE_BATTLESTART  },
   { EventType::CONVERSATION, kKEY_TYPE_CONVERSATION },
   { EventType::ITEMGIVE,     kKEY_TYPE_ITEMGIVE     },
@@ -75,7 +75,7 @@ const std::map<EventType, std::string> kTYPE_TO_STRING = {
  * @param index current index within the line, represents which XML element is currently being read
  * @return augmented event by the load state
  */
-Event* EventPersistence::load(Event* event, XmlData data, int index)
+Event* PersistEvent::load(Event* event, XmlData data, int index)
 {
   std::string element = data.getElement(index);
 
@@ -107,16 +107,19 @@ Event* EventPersistence::load(Event* event, XmlData data, int index)
  * @param event persist ready event object
  * @param writer saving file handler interface
  */
-void EventPersistence::save(Event* event, XmlWriter* writer)
+void PersistEvent::save(Event* event, XmlWriter* writer)
 {
-  auto found_type_pair = kTYPE_TO_STRING.find(event->getType());
-  if(found_type_pair == kTYPE_TO_STRING.end())
-    throw std::domain_error("Event type mapping for save event is not defined");
+  if(event->isSaveable())
+  {
+    auto found_type_pair = kTYPE_TO_STRING.find(event->getType());
+    if(found_type_pair == kTYPE_TO_STRING.end())
+      throw std::domain_error("Event type mapping for save event is not defined");
 
-  std::string type_string = found_type_pair->second;
-  writer->writeElement(type_string);
-  event->save(writer);
-  writer->jumpToParent();
+    std::string type_string = found_type_pair->second;
+    writer->writeElement(type_string);
+    event->save(writer);
+    writer->jumpToParent();
+  }
 }
 
 /*=============================================================================
@@ -128,7 +131,7 @@ void EventPersistence::save(Event* event, XmlWriter* writer)
  * @param type event classification
  * @return newly created event object
  */
-Event* EventPersistence::createEventFromType(EventType type)
+Event* PersistEvent::createEventFromType(EventType type)
 {
   switch(type) {
     case EventType::BATTLESTART:

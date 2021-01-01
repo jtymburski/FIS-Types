@@ -16,6 +16,15 @@ namespace core
   public:
     /* Returns event type classification */
     EventType getType() const override;
+
+    /* Returns if the event can be saved */
+    bool isSaveable() const override;
+
+    /* Loads event data from the XML entry */
+    void load(XmlData data, int index) override;
+
+    /* Saves all event data into the XML writer */
+    void save(XmlWriter* writer) const override;
   };
 };
 

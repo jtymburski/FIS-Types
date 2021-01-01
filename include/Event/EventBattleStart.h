@@ -7,14 +7,14 @@
 #ifndef CORE_EVENTBATTLESTART_H
 #define CORE_EVENTBATTLESTART_H
 
-#include "Event/Event.h"
 #include "Event/EventNone.h"
-#include "Event/EventPersistence.h"
 #include "Event/EventType.h"
+#include "Event/ExecutableEvent.h"
+#include "Event/PersistEvent.h"
 
 namespace core
 {
-  class EventBattleStart : public Event
+  class EventBattleStart : public ExecutableEvent
   {
   public:
     /* Destructor function */
@@ -50,6 +50,16 @@ namespace core
     const static std::string kKEY_TARGET_HIDE_ON_WIN;
 
   /*=============================================================================
+   * PRIVATE FUNCTIONS
+   *============================================================================*/
+  private:
+    /* Loads event data from the XML entry, specific to the event type (sub-class) */
+    void loadForType(std::string element, XmlData data, int index) override;
+
+    /* Saves all event data into the XML writer, specific to the event type (sub-class) */
+    void saveForType(XmlWriter* writer) const override;
+
+  /*=============================================================================
    * PUBLIC FUNCTIONS
    *============================================================================*/
   public:
@@ -73,12 +83,6 @@ namespace core
 
     /* Returns if on win, the initiating target should be removed from the map */
     bool isTargetHiddenOnWin() const;
-
-    /* Loads event data from the XML entry */
-    void load(XmlData data, int index) override;
-
-    /* Saves all event data into the XML writer */
-    void save(XmlWriter* writer) const override;
 
     /* Sets if on lose, the game should be over */
     void setGameOverOnLoss(bool game_over_on_loss);

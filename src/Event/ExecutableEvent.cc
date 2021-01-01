@@ -1,15 +1,15 @@
 /**
- * @class Event
+ * @class ExecutableEvent
  *
- * Event base abstract class. This parent centralizes the common event functionality of
- * what can be triggered.
+ * Executable event abstract class. This extends the base {@link Event} to add common
+ * functionality that is shared across any event that can be executed by the player.
  */
-#include "Event/Event.h"
+#include "Event/ExecutableEvent.h"
 using namespace core;
 
 /* Constant Implementation - see header file for descriptions */
-const std::string kKEY_ONE_SHOT = "one_shot";
-const std::string kKEY_SOUND_ID = "sound_id";
+const std::string ExecutableEvent::kKEY_ONE_SHOT = "one_shot";
+const std::string ExecutableEvent::kKEY_SOUND_ID = "sound_id";
 
 /*=============================================================================
  * PUBLIC FUNCTIONS
@@ -19,7 +19,7 @@ const std::string kKEY_SOUND_ID = "sound_id";
  * Sound system identifier for the trigger on action animation of the event.
  * @return sound ID. Can be unset (<0)
  */
-int32_t Event::getSoundId() const
+int32_t ExecutableEvent::getSoundId() const
 {
   return sound_id;
 }
@@ -28,9 +28,19 @@ int32_t Event::getSoundId() const
  * Should the event only trigger once when it is executed.
  * @return TRUE if it should trigger once. FALSE if it can execute each time
  */
-bool Event::isOneShot() const
+bool ExecutableEvent::isOneShot() const
 {
   return one_shot;
+}
+
+/**
+ * Returns if the event can be saved using {@link save(XmlWriter*)}. Executable events at their
+ * core can be saved.
+ * @return TRUE if it will generate save data
+ */
+bool ExecutableEvent::isSaveable() const
+{
+  return true;
 }
 
 /**
@@ -39,9 +49,10 @@ bool Event::isOneShot() const
  * @param index current index within the line, represents which XML element is currently being read
  * @throws std::bad_cast if any correctly named element doesn't match the type expected
  */
-void Event::load(XmlData data, int index)
+void ExecutableEvent::load(XmlData data, int index)
 {
   std::string element = data.getElement(index);
+  loadForType(element, data, index);
 
   if(element == kKEY_ONE_SHOT)
     setOneShot(data.getDataBooleanOrThrow());
@@ -53,8 +64,10 @@ void Event::load(XmlData data, int index)
  * Saves all event data into the XML writer.
  * @param writer saving file handler interface
  */
-void Event::save(XmlWriter* writer) const
+void ExecutableEvent::save(XmlWriter* writer) const
 {
+  saveForType(writer);
+
   if(isOneShot())
     writer->writeData(kKEY_ONE_SHOT, isOneShot());
   if(getSoundId() >= 0)
@@ -65,7 +78,7 @@ void Event::save(XmlWriter* writer) const
  * Sets if the event will only trigger once.
  * @param one_shot the new value that defines if the event shuold only trigger once
  */
-void Event::setOneShot(bool one_shot)
+void ExecutableEvent::setOneShot(bool one_shot)
 {
   this->one_shot = one_shot;
 }
@@ -74,7 +87,7 @@ void Event::setOneShot(bool one_shot)
  * Sets the sound action identifier paired with the event.
  * @param sound_id the Sound#getId() for event trigger. Set less than 0 to unset
  */
-void Event::setSoundId(int32_t sound_id)
+void ExecutableEvent::setSoundId(int32_t sound_id)
 {
   this->sound_id = sound_id;
 }

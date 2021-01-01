@@ -18,3 +18,26 @@ EventType EventNone::getType() const
 {
   return EventType::NONE;
 }
+
+/**
+ * Returns if the event can be saved using {@link save(XmlWriter*)}.
+ * @return TRUE if it will generate save data
+ */
+bool EventNone::isSaveable() const
+{
+  return false;
+}
+
+/**
+ * Loads event data from the XML entry. In this implementation, it is no-op.
+ */
+void EventNone::load(XmlData, int)
+{
+}
+
+/**
+ * Saves all event data into the XML writer. In this implementation, it is no-op.
+ */
+void EventNone::save(XmlWriter*) const
+{
+}
