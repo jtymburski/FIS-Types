@@ -7,6 +7,49 @@
 #include "Event/EventTeleport.h"
 using namespace core;
 
+/* Constant Implementation - see header file for descriptions */
+const std::string EventTeleport::kKEY_SECTION_ID = "section";
+const std::string EventTeleport::kKEY_THING_ID = "id";
+const std::string EventTeleport::kKEY_TILE_HORIZONTAL = "x";
+const std::string EventTeleport::kKEY_TILE_VERTICAL = "y";
+
+/*=============================================================================
+ * PRIVATE FUNCTIONS
+ *============================================================================*/
+
+/**
+ * Loads event data from the XML entry, specific to the event type (sub-class).
+ * @param element XML key name for the {@link index} in the tree
+ * @param data single packet of XML data
+ * @throws std::bad_cast if any correctly named element doesn't match the type expected
+ */
+void EventTeleport::loadForType(std::string element, XmlData data, int)
+{
+  if(element == kKEY_SECTION_ID)
+    setSectionId(data.getDataIntegerOrThrow());
+  else if(element == kKEY_THING_ID)
+    setThingId(data.getDataIntegerOrThrow());
+  else if(element == kKEY_TILE_HORIZONTAL)
+    setTileHorizontal(data.getDataIntegerOrThrow());
+  else if(element == kKEY_TILE_VERTICAL)
+    setTileVertical(data.getDataIntegerOrThrow());
+}
+
+/**
+ * Saves all event data into the XML writer, specific to the event type (sub-class).
+ * @param writer saving file handler interface
+ */
+void EventTeleport::saveForType(XmlWriter* writer) const
+{
+  writer->writeData(kKEY_TILE_HORIZONTAL, getTileHorizontal());
+  writer->writeData(kKEY_TILE_VERTICAL, getTileVertical());
+
+  if(getSectionId() != kACTIVE_SECTION_ID)
+    writer->writeData(kKEY_SECTION_ID, getSectionId());
+  if(getThingId() != 0)
+    writer->writeData(kKEY_THING_ID, getThingId());
+}
+
 /*=============================================================================
  * PUBLIC FUNCTIONS
  *============================================================================*/

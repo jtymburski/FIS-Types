@@ -7,6 +7,34 @@
 #include "Event/EventTriggerIO.h"
 using namespace core;
 
+/* Constant Implementation - see header file for descriptions */
+const std::string EventTriggerIO::kKEY_IO_ID = "id";
+
+/*=============================================================================
+ * PRIVATE FUNCTIONS
+ *============================================================================*/
+
+/**
+ * Loads event data from the XML entry, specific to the event type (sub-class).
+ * @param element XML key name for the {@link index} in the tree
+ * @param data single packet of XML data
+ * @throws std::bad_cast if any correctly named element doesn't match the type expected
+ */
+void EventTriggerIO::loadForType(std::string element, XmlData data, int)
+{
+  if(element == kKEY_IO_ID)
+    setInteractiveObjectId(data.getDataIntegerOrThrow());
+}
+
+/**
+ * Saves all event data into the XML writer, specific to the event type (sub-class).
+ * @param writer saving file handler interface
+ */
+void EventTriggerIO::saveForType(XmlWriter* writer) const
+{
+  writer->writeData(kKEY_IO_ID, getInteractiveObjectId());
+}
+
 /*=============================================================================
  * PUBLIC FUNCTIONS
  *============================================================================*/

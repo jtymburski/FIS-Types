@@ -8,22 +8,37 @@
 #define CORE_EVENTTRIGGERIO_H
 
 #include <cstdint>
+#include <string>
 
-#include "Event/Event.h"
 #include "Event/EventType.h"
+#include "Event/ExecutableEvent.h"
 
 namespace core
 {
-  class EventTriggerIO : public Event
+  class EventTriggerIO : public ExecutableEvent
   {
   private:
     /* Unique identifier for the interactive object */
     int32_t io_id = kINITIATING_IO_ID;
 
     /*------------------- Constants -----------------------*/
+  private:
+    /* Data storage key names */
+    const static std::string kKEY_IO_ID;
+
   public:
     /* Special ID for the initiating interactive object (event source) */
     const static int32_t kINITIATING_IO_ID = -1;
+
+  /*=============================================================================
+   * PRIVATE FUNCTIONS
+   *============================================================================*/
+  private:
+    /* Loads event data from the XML entry, specific to the event type (sub-class) */
+    void loadForType(std::string element, XmlData data, int index) override;
+
+    /* Saves all event data into the XML writer, specific to the event type (sub-class) */
+    void saveForType(XmlWriter* writer) const override;
 
   /*=============================================================================
    * PUBLIC FUNCTIONS

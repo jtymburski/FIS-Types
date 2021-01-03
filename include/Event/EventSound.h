@@ -6,13 +6,23 @@
 #ifndef CORE_EVENTSOUND_H
 #define CORE_EVENTSOUND_H
 
-#include "Event/Event.h"
 #include "Event/EventType.h"
+#include "Event/ExecutableEvent.h"
 
 namespace core
 {
-  class EventSound : public Event
+  class EventSound : public ExecutableEvent
   {
+  /*=============================================================================
+   * PRIVATE FUNCTIONS
+   *============================================================================*/
+  private:
+    /* Loads event data from the XML entry, specific to the event type (sub-class) */
+    void loadForType(std::string element, XmlData data, int index) override;
+
+    /* Saves all event data into the XML writer, specific to the event type (sub-class) */
+    void saveForType(XmlWriter* writer) const override;
+
   /*=============================================================================
    * PUBLIC FUNCTIONS
    *============================================================================*/

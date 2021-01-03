@@ -8,13 +8,14 @@
 #define CORE_EVENTTELEPORT_H
 
 #include <cstdint>
+#include <string>
 
-#include "Event/Event.h"
 #include "Event/EventType.h"
+#include "Event/ExecutableEvent.h"
 
 namespace core
 {
-  class EventTeleport : public Event
+  class EventTeleport : public ExecutableEvent
   {
   private:
     /* Map section within the current map */
@@ -31,8 +32,24 @@ namespace core
 
     /*------------------- Constants -----------------------*/
 
+    /* Data storage key names */
+    const static std::string kKEY_SECTION_ID;
+    const static std::string kKEY_THING_ID;
+    const static std::string kKEY_TILE_HORIZONTAL;
+    const static std::string kKEY_TILE_VERTICAL;
+
     /* Special ID for the current active map section ID */
     const static int16_t kACTIVE_SECTION_ID = -1;
+
+  /*=============================================================================
+   * PRIVATE FUNCTIONS
+   *============================================================================*/
+  private:
+    /* Loads event data from the XML entry, specific to the event type (sub-class) */
+    void loadForType(std::string element, XmlData data, int index) override;
+
+    /* Saves all event data into the XML writer, specific to the event type (sub-class) */
+    void saveForType(XmlWriter* writer) const override;
 
   /*=============================================================================
    * PUBLIC FUNCTIONS
