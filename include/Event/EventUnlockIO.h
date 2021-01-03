@@ -8,6 +8,7 @@
 #define CORE_EVENTUNLOCKIO_H
 
 #include <cstdint>
+#include <string>
 
 #include "Event/EventType.h"
 #include "Event/EventUnlock.h"
@@ -39,12 +40,33 @@ namespace core
     bool unlock_interaction = false;
 
     /*------------------- Constants -----------------------*/
+  private:
+    /* Data storage key names */
+    const static std::string kKEY_IO_ID;
+    const static std::string kKEY_STATE_ID;
+    const static std::string kKEY_UNLOCK_EVENT_ALL;
+    const static std::string kKEY_UNLOCK_EVENT_ENTER;
+    const static std::string kKEY_UNLOCK_EVENT_EXIT;
+    const static std::string kKEY_UNLOCK_EVENT_USE;
+    const static std::string kKEY_UNLOCK_EVENT_WALKOVER;
+    const static std::string kKEY_UNLOCK_INTERACTION;
+
   public:
     /* Special ID for the all states in the object */
     const static int16_t kALL_STATES_ID = -1;
 
     /* Special ID for the initiating interactive object (event source) */
     const static int32_t kINITIATING_IO_ID = -1;
+
+  /*=============================================================================
+   * PRIVATE FUNCTIONS
+   *============================================================================*/
+  private:
+    /* Loads unlock event data from the XML entry, specific to the unlock type */
+    void loadForUnlock(std::string element, XmlData data, int index) override;
+
+    /* Saves unlock event data into the XML writer, specific to the unlock type */
+    void saveForUnlock(XmlWriter* writer) const override;
 
   /*=============================================================================
    * PUBLIC FUNCTIONS

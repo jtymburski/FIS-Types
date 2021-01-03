@@ -7,6 +7,34 @@
 #include "Event/EventUnlockThing.h"
 using namespace core;
 
+/* Constant Implementation - see header file for descriptions */
+const std::string EventUnlockThing::kKEY_THING_ID = "id";
+
+/*=============================================================================
+ * PRIVATE FUNCTIONS
+ *============================================================================*/
+
+/**
+ * Loads unlock event data from the XML entry, specific to the unlock type.
+ * @param element XML key name for the {@link index} in the tree
+ * @param data single packet of XML data
+ * @throws std::bad_cast if any correctly named element doesn't match the type expected
+ */
+void EventUnlockThing::loadForUnlock(std::string element, XmlData data, int)
+{
+  if(element == kKEY_THING_ID)
+    setThingId(data.getDataIntegerOrThrow());
+}
+
+/**
+ * Saves unlock event data into the XML writer, specific to the unlock type.
+ * @param writer saving file handler interface
+ */
+void EventUnlockThing::saveForUnlock(XmlWriter* writer) const
+{
+  writer->writeData(kKEY_THING_ID, getThingId());
+}
+
 /*=============================================================================
  * PUBLIC FUNCTIONS
  *============================================================================*/

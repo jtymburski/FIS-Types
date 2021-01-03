@@ -8,6 +8,7 @@
 #define CORE_EVENTUNLOCKTILE_H
 
 #include <cstdint>
+#include <string>
 
 #include "Event/EventType.h"
 #include "Event/EventUnlock.h"
@@ -33,9 +34,28 @@ namespace core
     bool unlock_event_exit = false;
 
     /*------------------- Constants -----------------------*/
+  private:
+    /* Data storage key names */
+    const static std::string kKEY_SECTION_ID;
+    const static std::string kKEY_TILE_HORIZONTAL;
+    const static std::string kKEY_TILE_VERTICAL;
+    const static std::string kKEY_UNLOCK_EVENT_ALL;
+    const static std::string kKEY_UNLOCK_EVENT_ENTER;
+    const static std::string kKEY_UNLOCK_EVENT_EXIT;
+
   public:
     /* Special ID for the current active map section ID */
     const static int16_t kACTIVE_SECTION_ID = -1;
+
+  /*=============================================================================
+   * PRIVATE FUNCTIONS
+   *============================================================================*/
+  private:
+    /* Loads unlock event data from the XML entry, specific to the unlock type */
+    void loadForUnlock(std::string element, XmlData data, int index) override;
+
+    /* Saves unlock event data into the XML writer, specific to the unlock type */
+    void saveForUnlock(XmlWriter* writer) const override;
 
   /*=============================================================================
    * PUBLIC FUNCTIONS

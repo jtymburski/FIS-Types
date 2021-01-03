@@ -7,6 +7,67 @@
 #include "Event/EventUnlockTile.h"
 using namespace core;
 
+/* Constant Implementation - see header file for descriptions */
+const std::string EventUnlockTile::kKEY_SECTION_ID = "sectionid";
+const std::string EventUnlockTile::kKEY_TILE_HORIZONTAL = "x";
+const std::string EventUnlockTile::kKEY_TILE_VERTICAL = "y";
+const std::string EventUnlockTile::kKEY_UNLOCK_EVENT_ALL = "eventall";
+const std::string EventUnlockTile::kKEY_UNLOCK_EVENT_ENTER = "evententer";
+const std::string EventUnlockTile::kKEY_UNLOCK_EVENT_EXIT = "eventexit";
+
+/*=============================================================================
+ * PRIVATE FUNCTIONS
+ *============================================================================*/
+
+/**
+ * Loads unlock event data from the XML entry, specific to the unlock type.
+ * @param element XML key name for the {@link index} in the tree
+ * @param data single packet of XML data
+ * @throws std::bad_cast if any correctly named element doesn't match the type expected
+ */
+void EventUnlockTile::loadForUnlock(std::string element, XmlData data, int)
+{
+  if(element == kKEY_SECTION_ID)
+    setSectionId(data.getDataIntegerOrThrow());
+  else if(element == kKEY_TILE_HORIZONTAL)
+    setTileHorizontal(data.getDataIntegerOrThrow());
+  else if(element == kKEY_TILE_VERTICAL)
+    setTileVertical(data.getDataIntegerOrThrow());
+  else if(element == kKEY_UNLOCK_EVENT_ALL)
+  {
+    bool unlock_event = data.getDataBooleanOrThrow();
+    setUnlockEventEnter(unlock_event);
+    setUnlockEventExit(unlock_event);
+  }
+  else if(element == kKEY_UNLOCK_EVENT_ENTER)
+    setUnlockEventEnter(data.getDataBooleanOrThrow());
+  else if(element == kKEY_UNLOCK_EVENT_EXIT)
+    setUnlockEventExit(data.getDataBooleanOrThrow());
+}
+
+/**
+ * Saves unlock event data into the XML writer, specific to the unlock type.
+ * @param writer saving file handler interface
+ */
+void EventUnlockTile::saveForUnlock(XmlWriter* writer) const
+{
+  writer->writeData(kKEY_TILE_HORIZONTAL, getTileHorizontal());
+  writer->writeData(kKEY_TILE_VERTICAL, getTileVertical());
+
+  if(getSectionId() != kACTIVE_SECTION_ID)
+    writer->writeData(kKEY_SECTION_ID, getSectionId());
+
+  if(isUnlockEventEnter() && isUnlockEventExit())
+    writer->writeData(kKEY_UNLOCK_EVENT_ALL, true);
+  else
+  {
+    if(isUnlockEventEnter())
+      writer->writeData(kKEY_UNLOCK_EVENT_ENTER, isUnlockEventEnter());
+    if(isUnlockEventExit())
+      writer->writeData(kKEY_UNLOCK_EVENT_EXIT, isUnlockEventExit());
+  }
+}
+
 /*=============================================================================
  * PUBLIC FUNCTIONS
  *============================================================================*/

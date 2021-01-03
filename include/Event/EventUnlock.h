@@ -8,12 +8,13 @@
 #define CORE_EVENTUNLOCK_H
 
 #include <cstdint>
+#include <string>
 
-#include "Event/Event.h"
+#include "Event/ExecutableEvent.h"
 
 namespace core
 {
-  class EventUnlock : public Event
+  class EventUnlock : public ExecutableEvent
   {
   private:
     /* Scroll the viewport to the target instead of fading in and out */
@@ -26,9 +27,31 @@ namespace core
     uint32_t view_time_ms = kDEFAULT_VIEW_TIME_MS;
 
     /*------------------- Constants -----------------------*/
+  private:
+    /* Data storage key names */
+    const static std::string kKEY_VIEW_SCROLL;
+    const static std::string kKEY_VIEW_TARGET;
+    const static std::string kKEY_VIEW_TIME;
+
   public:
     /* Default view time of the unlocking target, in milliseconds */
     const static uint32_t kDEFAULT_VIEW_TIME_MS = 1000;
+
+  /*=============================================================================
+   * PRIVATE FUNCTIONS
+   *============================================================================*/
+  private:
+    /* Loads event data from the XML entry, specific to the event type (sub-class) */
+    void loadForType(std::string element, XmlData data, int index) override;
+
+    /* Loads unlock event data from the XML entry, specific to the unlock type */
+    virtual void loadForUnlock(std::string element, XmlData data, int index) = 0;
+
+    /* Saves all event data into the XML writer, specific to the event type (sub-class) */
+    void saveForType(XmlWriter* writer) const override;
+
+    /* Saves unlock event data into the XML writer, specific to the unlock type */
+    virtual void saveForUnlock(XmlWriter* writer) const = 0;
 
   /*=============================================================================
    * PUBLIC FUNCTIONS

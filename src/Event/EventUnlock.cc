@@ -7,6 +7,53 @@
 #include "Event/EventUnlock.h"
 using namespace core;
 
+/* Constant Implementation - see header file for descriptions */
+const std::string EventUnlock::kKEY_VIEW_SCROLL = "viewscroll";
+const std::string EventUnlock::kKEY_VIEW_TARGET = "view";
+const std::string EventUnlock::kKEY_VIEW_TIME = "viewtime";
+
+/*=============================================================================
+ * PRIVATE FUNCTIONS
+ *============================================================================*/
+
+/**
+ * Loads event data from the XML entry, specific to the event type (sub-class).
+ * @param element XML key name for the {@link index} in the tree
+ * @param data single packet of XML data
+ * @param index current index within the line, represents which XML element is currently being read
+ * @throws std::bad_cast if any correctly named element doesn't match the type expected
+ */
+void EventUnlock::loadForType(std::string element, XmlData data, int index)
+{
+  loadForUnlock(element, data, index);
+
+  if(element == kKEY_VIEW_SCROLL)
+    setViewScroll(data.getDataBooleanOrThrow());
+  else if(element == kKEY_VIEW_TARGET)
+    setViewTarget(data.getDataBooleanOrThrow());
+  else if(element == kKEY_VIEW_TIME)
+    setViewTimeMilliseconds(data.getDataIntegerOrThrow());
+}
+
+/**
+ * Saves all event data into the XML writer, specific to the event type (sub-class).
+ * @param writer saving file handler interface
+ */
+void EventUnlock::saveForType(XmlWriter* writer) const
+{
+  saveForUnlock(writer);
+
+  if(isViewTarget())
+  {
+    writer->writeData(kKEY_VIEW_TARGET, isViewTarget());
+
+    if(isViewScroll())
+      writer->writeData(kKEY_VIEW_SCROLL, isViewScroll());
+    if(getViewTimeMilliseconds() != kDEFAULT_VIEW_TIME_MS)
+      writer->writeData(kKEY_VIEW_TIME, getViewTimeMilliseconds());
+  }
+}
+
 /*=============================================================================
  * PUBLIC FUNCTIONS
  *============================================================================*/

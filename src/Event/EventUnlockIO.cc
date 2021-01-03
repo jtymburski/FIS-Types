@@ -7,6 +7,85 @@
 #include "Event/EventUnlockIO.h"
 using namespace core;
 
+/* Constant Implementation - see header file for descriptions */
+const std::string EventUnlockIO::kKEY_IO_ID = "id";
+const std::string EventUnlockIO::kKEY_STATE_ID = "state";
+const std::string EventUnlockIO::kKEY_UNLOCK_EVENT_ALL = "eventall";
+const std::string EventUnlockIO::kKEY_UNLOCK_EVENT_ENTER = "evententer";
+const std::string EventUnlockIO::kKEY_UNLOCK_EVENT_EXIT = "eventexit";
+const std::string EventUnlockIO::kKEY_UNLOCK_EVENT_USE = "eventuse";
+const std::string EventUnlockIO::kKEY_UNLOCK_EVENT_WALKOVER = "eventwalkover";
+const std::string EventUnlockIO::kKEY_UNLOCK_INTERACTION = "modelock";
+
+/*=============================================================================
+ * PRIVATE FUNCTIONS
+ *============================================================================*/
+
+/**
+ * Loads unlock event data from the XML entry, specific to the unlock type.
+ * @param element XML key name for the {@link index} in the tree
+ * @param data single packet of XML data
+ * @throws std::bad_cast if any correctly named element doesn't match the type expected
+ */
+void EventUnlockIO::loadForUnlock(std::string element, XmlData data, int)
+{
+  if(element == kKEY_IO_ID)
+    setInteractiveObjectId(data.getDataIntegerOrThrow());
+  else if(element == kKEY_STATE_ID)
+    setStateId(data.getDataIntegerOrThrow());
+  else if(element == kKEY_UNLOCK_EVENT_ALL)
+  {
+    bool unlock_event = data.getDataBooleanOrThrow();
+    setUnlockEventEnter(unlock_event);
+    setUnlockEventExit(unlock_event);
+    setUnlockEventUse(unlock_event);
+    setUnlockEventWalkover(unlock_event);
+  }
+  else if(element == kKEY_UNLOCK_EVENT_ENTER)
+    setUnlockEventEnter(data.getDataBooleanOrThrow());
+  else if(element == kKEY_UNLOCK_EVENT_EXIT)
+    setUnlockEventExit(data.getDataBooleanOrThrow());
+  else if(element == kKEY_UNLOCK_EVENT_USE)
+    setUnlockEventUse(data.getDataBooleanOrThrow());
+  else if(element == kKEY_UNLOCK_EVENT_WALKOVER)
+    setUnlockEventWalkover(data.getDataBooleanOrThrow());
+  else if(element == kKEY_UNLOCK_INTERACTION)
+    setUnlockInteraction(data.getDataBooleanOrThrow());
+}
+
+/**
+ * Saves unlock event data into the XML writer, specific to the unlock type.
+ * @param writer saving file handler interface
+ */
+void EventUnlockIO::saveForUnlock(XmlWriter* writer) const
+{
+  writer->writeData(kKEY_IO_ID, getInteractiveObjectId());
+
+  if(isUnlockInteraction())
+    writer->writeData(kKEY_UNLOCK_INTERACTION, isUnlockInteraction());
+
+  // Unlock event data
+  if(isUnlockEventEnter() || isUnlockEventExit() || isUnlockEventUse() || isUnlockEventWalkover())
+  {
+    if(getStateId() != kALL_STATES_ID)
+      writer->writeData(kKEY_STATE_ID, getStateId());
+
+    if(isUnlockEventEnter() && isUnlockEventExit() && isUnlockEventUse() && isUnlockEventWalkover())
+      writer->writeData(kKEY_UNLOCK_EVENT_ALL, true);
+    else
+    {
+      if(isUnlockEventEnter())
+        writer->writeData(kKEY_UNLOCK_EVENT_ENTER, isUnlockEventEnter());
+      if(isUnlockEventExit())
+        writer->writeData(kKEY_UNLOCK_EVENT_EXIT, isUnlockEventExit());
+      if(isUnlockEventUse())
+        writer->writeData(kKEY_UNLOCK_EVENT_USE, isUnlockEventUse());
+      if(isUnlockEventWalkover())
+        writer->writeData(kKEY_UNLOCK_EVENT_WALKOVER, isUnlockEventWalkover());
+    }
+  }
+}
+
 /*=============================================================================
  * PUBLIC FUNCTIONS
  *============================================================================*/
