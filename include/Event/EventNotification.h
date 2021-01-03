@@ -9,16 +9,31 @@
 
 #include <string>
 
-#include "Event/Event.h"
 #include "Event/EventType.h"
+#include "Event/ExecutableEvent.h"
 
 namespace core
 {
-  class EventNotification : public Event
+  class EventNotification : public ExecutableEvent
   {
   private:
     /* Notification string to present to the player */
     std::string notification;
+
+    /*------------------- Constants -----------------------*/
+  private:
+    /* Data storage key names */
+    const static std::string kKEY_TEXT;
+
+  /*=============================================================================
+   * PRIVATE FUNCTIONS
+   *============================================================================*/
+  private:
+    /* Loads event data from the XML entry, specific to the event type (sub-class) */
+    void loadForType(std::string element, XmlData data, int index) override;
+
+    /* Saves all event data into the XML writer, specific to the event type (sub-class) */
+    void saveForType(XmlWriter* writer) const override;
 
   /*=============================================================================
    * PUBLIC FUNCTIONS

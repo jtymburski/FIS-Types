@@ -7,6 +7,12 @@
 #include "Event/EventMultiple.h"
 using namespace core;
 
+/* Constant Implementation - see header file for descriptions */
+const std::string EventMultiple::kKEY_EVENT = "event";
+const std::string EventMultiple::kKEY_EVENT_ID = "id";
+
+const std::regex EventMultiple::kPOSITIVE_INTEGER_FORMAT("^\\d+$");
+
 /*=============================================================================
  * CONSTRUCTORS / DESTRUCTORS
  *============================================================================*/
@@ -32,6 +38,52 @@ void EventMultiple::deleteEvents()
   for(auto &event : events)
     delete event;
   events.clear();
+}
+
+/**
+ * Loads event data from the XML entry, specific to the event type (sub-class).
+ * @param element XML key name for the {@link index} in the tree
+ * @param data single packet of XML data
+ * @param index current index within the line, represents which XML element is currently being read
+ * @throws std::bad_cast if any correctly named element doesn't match the type expected
+ */
+void EventMultiple::loadForType(std::string element, XmlData data, int index)
+{
+  if(element == kKEY_EVENT)
+  {
+    std::string key = data.getKey(index);
+    std::string key_value = data.getKeyValue(index);
+    if(key == kKEY_EVENT_ID && std::regex_match(key_value, kPOSITIVE_INTEGER_FORMAT))
+    {
+      uint8_t event_index = std::stoi(key_value);
+
+      if(event_index >= getEventCount())
+      {
+        Event* empty_event = new EventNone();;
+        setEvent(event_index, *empty_event);
+      }
+
+      events[event_index] = PersistEvent::load(events.at(event_index), data, index + 1);
+    }
+  }
+}
+
+/**
+ * Saves all event data into the XML writer, specific to the event type (sub-class).
+ * @param writer saving file handler interface
+ */
+void EventMultiple::saveForType(XmlWriter* writer) const
+{
+  for(uint32_t i = 0; i < events.size(); i++)
+  {
+    Event* event_to_save = events.at(i);
+    if(event_to_save->isSaveable())
+    {
+      writer->writeElement(kKEY_EVENT, kKEY_EVENT_ID, std::to_string(i));
+      PersistEvent::save(event_to_save, writer);
+      writer->jumpToParent();
+    }
+  }
 }
 
 /*=============================================================================

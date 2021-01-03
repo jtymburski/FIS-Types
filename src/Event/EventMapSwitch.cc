@@ -7,6 +7,34 @@
 #include "Event/EventMapSwitch.h"
 using namespace core;
 
+/* Constant Implementation - see header file for descriptions */
+const std::string EventMapSwitch::kKEY_MAP_ID = "id";
+
+/*=============================================================================
+ * PRIVATE FUNCTIONS
+ *============================================================================*/
+
+/**
+ * Loads event data from the XML entry, specific to the event type (sub-class).
+ * @param element XML key name for the {@link index} in the tree
+ * @param data single packet of XML data
+ * @throws std::bad_cast if any correctly named element doesn't match the type expected
+ */
+void EventMapSwitch::loadForType(std::string element, XmlData data, int)
+{
+  if(element == kKEY_MAP_ID)
+    setMapId(data.getDataIntegerOrThrow());
+}
+
+/**
+ * Saves all event data into the XML writer, specific to the event type (sub-class).
+ * @param writer saving file handler interface
+ */
+void EventMapSwitch::saveForType(XmlWriter* writer) const
+{
+  writer->writeData(kKEY_MAP_ID, getMapId());
+}
+
 /*=============================================================================
  * PUBLIC FUNCTIONS
  *============================================================================*/

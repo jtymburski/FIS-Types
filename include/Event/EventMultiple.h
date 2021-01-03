@@ -8,16 +8,18 @@
 #define CORE_EVENTMULTIPLE_H
 
 #include <cstdint>
+#include <regex>
 #include <string>
 #include <vector>
 
-#include "Event/Event.h"
 #include "Event/EventNone.h"
 #include "Event/EventType.h"
+#include "Event/ExecutableEvent.h"
+#include "Event/PersistEvent.h"
 
 namespace core
 {
-  class EventMultiple : public Event
+  class EventMultiple : public ExecutableEvent
   {
   public:
     /* Destructor function */
@@ -27,12 +29,27 @@ namespace core
     /* List of events that are triggered together when executed */
     std::vector<Event*> events;
 
+    /*------------------- Constants -----------------------*/
+  private:
+    /* Data storage key names */
+    const static std::string kKEY_EVENT;
+    const static std::string kKEY_EVENT_ID;
+
+    /* Format representing a positive integer, 0+ */
+    const static std::regex kPOSITIVE_INTEGER_FORMAT;
+
   /*=============================================================================
    * PRIVATE FUNCTIONS
    *============================================================================*/
   private:
     /* Deletes all events stored in the list */
     void deleteEvents();
+
+    /* Loads event data from the XML entry, specific to the event type (sub-class) */
+    void loadForType(std::string element, XmlData data, int index) override;
+
+    /* Saves all event data into the XML writer, specific to the event type (sub-class) */
+    void saveForType(XmlWriter* writer) const override;
 
   /*=============================================================================
    * PUBLIC FUNCTIONS
