@@ -8,6 +8,145 @@
 #include "Event/EventProperty.h"
 using namespace core;
 
+/* Constant Implementation - see header file for descriptions */
+const std::string EventProperty::kKEY_IO_INACTIVE = "inactive";
+const std::string EventProperty::kKEY_IO_INACTIVE_DISABLED = "inactive_disable";
+const std::string EventProperty::kKEY_NPC_INTERACTION_FORCED = "forceinteract";
+const std::string EventProperty::kKEY_NPC_TRACKING = "tracking";
+const std::string EventProperty::kKEY_PERSON_LOCATION_RESET = "resetlocation";
+const std::string EventProperty::kKEY_PERSON_MOVEMENT_DISABLED = "movedisable";
+const std::string EventProperty::kKEY_PERSON_SPEED = "speed";
+const std::string EventProperty::kKEY_THING_ACTIVE = "active";
+const std::string EventProperty::kKEY_THING_ID = "id";
+const std::string EventProperty::kKEY_THING_RESPAWN = "respawn";
+const std::string EventProperty::kKEY_THING_RESPAWN_DISABLED = "respawn_disable";
+const std::string EventProperty::kKEY_THING_VISIBLE = "visible";
+const std::string EventProperty::kKEY_TRACKING_AVOID = "avoidplayer";
+const std::string EventProperty::kKEY_TRACKING_CHASE = "toplayer";
+const std::string EventProperty::kKEY_TRACKING_NONE = "notrack";
+
+/**
+ * Tracking enumerator from string key static map.
+ */
+const std::map<std::string, Tracking> EventProperty::kTRACKING_FROM_STRING = {
+  { kKEY_TRACKING_NONE,  Tracking::NONE  },
+  { kKEY_TRACKING_AVOID, Tracking::AVOID },
+  { kKEY_TRACKING_CHASE, Tracking::CHASE }
+};
+
+/**
+ * Tracking enumerator to string key static map.
+ */
+const std::map<Tracking, std::string> EventProperty::kTRACKING_TO_STRING = {
+  { Tracking::NONE,  kKEY_TRACKING_NONE  },
+  { Tracking::AVOID, kKEY_TRACKING_AVOID },
+  { Tracking::CHASE, kKEY_TRACKING_CHASE }
+};
+
+/*=============================================================================
+ * PRIVATE FUNCTIONS
+ *============================================================================*/
+
+/**
+ * Loads event data from the XML entry, specific to the event type (sub-class).
+ * @param element XML key name for the {@link index} in the tree
+ * @param data single packet of XML data
+ * @throws std::bad_cast if any correctly named element doesn't match the type expected
+ */
+void EventProperty::loadForType(std::string element, XmlData data, int)
+{
+  if(element == kKEY_IO_INACTIVE)
+    setIOStateInactiveMillis(data.getDataIntegerOrThrow());
+  else if(element == kKEY_IO_INACTIVE_DISABLED)
+  {
+    if(data.getDataBooleanOrThrow())
+      setIOStateInactiveDisabled();
+  }
+  else if(element == kKEY_NPC_INTERACTION_FORCED)
+    setNPCInteractionForced(data.getDataBooleanOrThrow());
+  else if(element == kKEY_NPC_TRACKING)
+  {
+    auto found_tracking_pair = kTRACKING_FROM_STRING.find(data.getDataStringOrThrow());
+    if(found_tracking_pair == kTRACKING_FROM_STRING.end())
+      throw std::domain_error("Tracking mapping for load property event is not defined");
+
+    setNPCTracking(found_tracking_pair->second);
+  }
+  else if(element == kKEY_PERSON_LOCATION_RESET)
+  {
+    if(data.getDataBooleanOrThrow())
+      setPersonLocationReset();
+  }
+  else if(element == kKEY_PERSON_MOVEMENT_DISABLED)
+    setPersonMovementDisabled(data.getDataBooleanOrThrow());
+  else if(element == kKEY_PERSON_SPEED)
+    setPersonSpeed(data.getDataIntegerOrThrow());
+  else if(element == kKEY_THING_ACTIVE)
+    setThingActive(data.getDataBooleanOrThrow());
+  else if(element == kKEY_THING_ID)
+    setThingId(data.getDataIntegerOrThrow());
+  else if(element == kKEY_THING_RESPAWN)
+    setThingRespawnMillis(data.getDataIntegerOrThrow());
+  else if(element == kKEY_THING_RESPAWN_DISABLED)
+  {
+    if(data.getDataBooleanOrThrow())
+      setThingRespawnDisabled();
+  }
+  else if(element == kKEY_THING_VISIBLE)
+    setThingVisible(data.getDataBooleanOrThrow());
+}
+
+/**
+ * Saves all event data into the XML writer, specific to the event type (sub-class).
+ * @param writer saving file handler interface
+ */
+void EventProperty::saveForType(XmlWriter* writer) const
+{
+  writer->writeData(kKEY_THING_ID, thing_id);
+
+  // Thing Data
+  if(isThingActiveSet())
+    writer->writeData(kKEY_THING_ACTIVE, isThingActive());
+  if(isThingRespawnSet())
+  {
+    if(isThingRespawnDisabled())
+      writer->writeData(kKEY_THING_RESPAWN_DISABLED, isThingRespawnDisabled());
+    else
+      writer->writeData(kKEY_THING_RESPAWN, getThingRespawnMillis());
+  }
+  if(isThingVisibleSet())
+    writer->writeData(kKEY_THING_VISIBLE, isThingVisible());
+
+  // Person Data
+  if(isPersonLocationReset())
+    writer->writeData(kKEY_PERSON_LOCATION_RESET, isPersonLocationReset());
+  if(isPersonMovementDisabledSet())
+    writer->writeData(kKEY_PERSON_MOVEMENT_DISABLED, isPersonMovementDisabled());
+  if(isPersonSpeedSet())
+    writer->writeData(kKEY_PERSON_SPEED, getPersonSpeed());
+
+  // NPC Data
+  if(isNPCInteractionForcedSet())
+    writer->writeData(kKEY_NPC_INTERACTION_FORCED, isNPCInteractionForced());
+  if(isNPCTrackingSet())
+  {
+    auto found_tracking_pair = kTRACKING_TO_STRING.find(getNPCTracking());
+    if(found_tracking_pair == kTRACKING_TO_STRING.end())
+      throw std::domain_error("Tracking mapping for save property event is not defined");
+
+    writer->writeData(kKEY_NPC_TRACKING, found_tracking_pair->second);
+  }
+
+  // IO Data
+  if(isIOStateInactiveSet())
+  {
+    if(isIOStateInactiveDisabled())
+      writer->writeData(kKEY_IO_INACTIVE_DISABLED, isIOStateInactiveDisabled());
+    else
+      writer->writeData(kKEY_IO_INACTIVE, getIOStateInactiveMillis());
+  }
+}
+
 /*=============================================================================
  * PUBLIC FUNCTIONS
  *============================================================================*/

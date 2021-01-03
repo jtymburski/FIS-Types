@@ -9,14 +9,16 @@
 #define CORE_EVENTPROPERTY_H
 
 #include <cstdint>
+#include <map>
+#include <string>
 
-#include "Event/Event.h"
 #include "Event/EventType.h"
+#include "Event/ExecutableEvent.h"
 #include "Map/Tracking.h"
 
 namespace core
 {
-  class EventProperty : public Event
+  class EventProperty : public ExecutableEvent
   {
   private:
     /* Time to return to the previous state in the interactive object if inactive. It can
@@ -63,9 +65,43 @@ namespace core
     bool thing_visible_set = false;
 
     /*------------------- Constants -----------------------*/
+  private:
+    /* Data storage key names */
+    const static std::string kKEY_IO_INACTIVE;
+    const static std::string kKEY_IO_INACTIVE_DISABLED;
+    const static std::string kKEY_NPC_INTERACTION_FORCED;
+    const static std::string kKEY_NPC_TRACKING;
+    const static std::string kKEY_PERSON_LOCATION_RESET;
+    const static std::string kKEY_PERSON_MOVEMENT_DISABLED;
+    const static std::string kKEY_PERSON_SPEED;
+    const static std::string kKEY_THING_ACTIVE;
+    const static std::string kKEY_THING_ID;
+    const static std::string kKEY_THING_RESPAWN;
+    const static std::string kKEY_THING_RESPAWN_DISABLED;
+    const static std::string kKEY_THING_VISIBLE;
+    const static std::string kKEY_TRACKING_AVOID;
+    const static std::string kKEY_TRACKING_CHASE;
+    const static std::string kKEY_TRACKING_NONE;
+
+    /* Tracking enumerator from string key map */
+    const static std::map<std::string, Tracking> kTRACKING_FROM_STRING;
+
+    /* Tracking enumerator to string key map */
+    const static std::map<Tracking, std::string> kTRACKING_TO_STRING;
+
   public:
     /* Unset thing ID */
     const static int32_t kUNSET_THING_ID = -1;
+
+  /*=============================================================================
+   * PRIVATE FUNCTIONS
+   *============================================================================*/
+  private:
+    /* Loads event data from the XML entry, specific to the event type (sub-class) */
+    void loadForType(std::string element, XmlData data, int index) override;
+
+    /* Saves all event data into the XML writer, specific to the event type (sub-class) */
+    void saveForType(XmlWriter* writer) const override;
 
   /*=============================================================================
    * PUBLIC FUNCTIONS
