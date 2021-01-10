@@ -17,13 +17,21 @@ const std::regex ConversationEntryIndex::kINDEX_STRING_FORMAT("^1(\\.[1-9]\\d*)*
  *============================================================================*/
 
 /**
+ * Construction function. Builds a root node index ({@link #isRoot()} returns true).
+ */
+ConversationEntryIndex::ConversationEntryIndex()
+{
+  groups.push_back(1);
+}
+
+/**
  * Constructor function. Takes in a correctly formatted index string and converts it
  * to the underlying storage mechanism for easy re-access. It will throw
  * {@link std::invalid_argument} if the format does not match.
  */
 ConversationEntryIndex::ConversationEntryIndex(std::string index_str)
 {
-  if(!std::regex_match(index_str, kINDEX_STRING_FORMAT))
+  if(!isValidString(index_str))
     throw std::invalid_argument("String index=" + index_str +
                                 " is not correctly formed to convert into a conversation index");
 
@@ -37,9 +45,49 @@ ConversationEntryIndex::ConversationEntryIndex(std::string index_str)
     groups.push_back(group_value);
 }
 
+/**
+ * Constructor function. Takes in an ordered vector of group values (node addresses) and builds
+ * the index object around it. It will throw {@link std::invalid_argument} if the index values
+ * are misconfigured.
+ */
+ConversationEntryIndex::ConversationEntryIndex(std::vector<uint8_t> index_groups)
+{
+  if(index_groups.size() == 0)
+    throw std::invalid_argument("Index groups passed in have no values in the vector. "
+                                "There must be at least one");
+  groups = index_groups;
+}
+
 /*=============================================================================
  * PUBLIC FUNCTIONS
  *============================================================================*/
+
+/**
+ * Copies the existing index (since its immutable) but re-creates it with a new tail group added
+ * and set to 1. This pushes the index address one node deeper.
+ * @return newly created index
+ */
+ConversationEntryIndex ConversationEntryIndex::copyAndAddTail() const
+{
+  std::vector<uint8_t> copied_groups(groups);
+  copied_groups.push_back(1);
+
+  return ConversationEntryIndex(copied_groups);
+}
+
+/**
+ * Copies the existing index (since its immutable) but re-creates it with the tail group value
+ * incremented by 1 (next leaf).
+ * @return newly created index
+ */
+ConversationEntryIndex ConversationEntryIndex::copyAndIncrementTail() const
+{
+  std::vector<uint8_t> copied_groups(groups);
+  uint16_t last_index = copied_groups.size() - 1;
+  copied_groups[last_index] = copied_groups[last_index] + 1;
+
+  return ConversationEntryIndex(copied_groups);
+}
 
 /*
  * Total number of group values in the index address.
@@ -89,4 +137,17 @@ std::string ConversationEntryIndex::toString() const
     index_str.pop_back();
 
   return index_str;
+}
+/*=============================================================================
+ * PUBLIC STATIC FUNCTIONS
+ *============================================================================*/
+
+/**
+ * Returns if the string is in the valid format to convert into the index object.
+ * @param index_str index string representing an entry in the tree
+ * @return TRUE if the string is correctly formed and can be converted into the entry object
+ */
+bool ConversationEntryIndex::isValidString(std::string index_str)
+{
+  return std::regex_match(index_str, kINDEX_STRING_FORMAT);
 }

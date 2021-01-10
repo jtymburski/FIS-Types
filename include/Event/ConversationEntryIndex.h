@@ -18,8 +18,15 @@ namespace core
 {
   class ConversationEntryIndex
   {
+  private:
+    /* Constructor function, from pre-built group value vector */
+    ConversationEntryIndex(std::vector<uint8_t> index_groups);
+
   public:
-    /* Constructor function */
+    /* Constructor function, for the root */
+    ConversationEntryIndex();
+
+    /* Constructor function, from string index */
     ConversationEntryIndex(std::string index_str);
 
   private:
@@ -38,6 +45,12 @@ namespace core
    * PUBLIC FUNCTIONS
    *============================================================================*/
   public:
+    /* Adds a new group value (1) to the tail in a newly created index */
+    ConversationEntryIndex copyAndAddTail() const;
+
+    /* Increments the last group value in a newly created index */
+    ConversationEntryIndex copyAndIncrementTail() const;
+
     /* Number of groups in the index */
     uint16_t groupCount() const;
 
@@ -49,6 +62,13 @@ namespace core
 
     /* Converts the index to a serialized string */
     std::string toString() const;
+
+  /*=============================================================================
+   * PUBLIC STATIC FUNCTIONS
+   *============================================================================*/
+  public:
+    /* Returns if the string is in the valid format to convert into the index object */
+    static bool isValidString(std::string index_str);
   };
 };
 

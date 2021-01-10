@@ -7,6 +7,11 @@
 #include "Event/Conversation.h"
 using namespace core;
 
+/* Constant Implementation - see header file for descriptions */
+const std::string Conversation::kKEY_ENTRY = "entry";
+const std::string Conversation::kKEY_ENTRY_ID = "id";
+const std::string Conversation::kKEY_ENTRY_LEGACY = "conversation";
+
 /*=============================================================================
  * CONSTRUCTORS / DESTRUCTORS
  *============================================================================*/
@@ -39,8 +44,8 @@ void Conversation::createFirstEntry()
 {
   if(root_entry->getNextEntryCount() == 0)
   {
-    ConversationEntry* first_entry = new ConversationEntryNone();
-    root_entry->setNextEntry(0, *first_entry, *first_entry);
+    ConversationEntryNone first_entry;
+    root_entry->setNextEntry(0, first_entry, first_entry);
   }
 }
 
@@ -73,7 +78,6 @@ ConversationEntry& Conversation::getEntry(ConversationEntry& previous_entry,
 /**
  * Recursive entry fetch to traverse the tree from previous and return the entry at the index. If
  * the entry doesn't exist, this method will fill in the gaps.
- * @param filler_entry padding to fill in the gaps if the address references non-existing entries
  * @param previous_entry previous conversation entry in the tree
  * @param index full tree entry address
  * @param group_max maximum group to fetch from index address. This can be used to stop the fetch
@@ -82,8 +86,7 @@ ConversationEntry& Conversation::getEntry(ConversationEntry& previous_entry,
  * @param group index of the entry address value that is currently being processed. Default 0
  * @return entry reference found at the address
  */
-ConversationEntry& Conversation::getOrAddEntry(ConversationEntry& filler_entry,
-                                               ConversationEntry& previous_entry,
+ConversationEntry& Conversation::getOrAddEntry(ConversationEntry& previous_entry,
                                                const ConversationEntryIndex& index,
                                                uint16_t group_max, uint16_t group) const
 {
@@ -101,13 +104,41 @@ ConversationEntry& Conversation::getOrAddEntry(ConversationEntry& filler_entry,
   // be managed by the conversation entry parent
   if(group_index >= previous_entry.getNextEntryCount())
   {
-    ConversationEntry* new_entry;
-    *new_entry = filler_entry;
-    previous_entry.setNextEntry(group_index, *new_entry, filler_entry);
+    ConversationEntryNone blank_entry;
+    previous_entry.setNextEntry(group_index, blank_entry, blank_entry);
   }
 
-  return getOrAddEntry(filler_entry, previous_entry.getNextEntry(group_index), index,
-                       group_max, group + 1);
+  return getOrAddEntry(previous_entry.getNextEntry(group_index), index, group_max, group + 1);
+}
+
+/**
+ * Saves an individual conversation entry into the XML writer. This is recursive and will continue
+ * through all leaf nodes before saving the entire tree.
+ * @param writer saving file handler interface
+ * @param index the entry index currently being saved
+ * @param entry the entry object to save, if it is saveable
+ */
+void Conversation::save(XmlWriter* writer, const ConversationEntryIndex& index,
+                        ConversationEntry& entry) const
+{
+  // Save the current entry
+  if(entry.getType() == ConversationEntryType::TEXT)
+  {
+    writer->writeElement(kKEY_ENTRY, kKEY_ENTRY_ID, index.toString());
+    //entry.save(writer); // TODO
+    writer->jumpToParent();
+  }
+
+  // Run through connected leaf nodes
+  if(entry.getNextEntryCount() > 0)
+  {
+    ConversationEntryIndex leaf_index = index.copyAndAddTail();
+    for(uint8_t i = 0; i < entry.getNextEntryCount(); i++)
+    {
+      save(writer, leaf_index, entry.getNextEntry(i));
+      leaf_index = leaf_index.copyAndIncrementTail();
+    }
+  }
 }
 
 /*=============================================================================
@@ -180,12 +211,76 @@ void Conversation::insertEntry(const ConversationEntryIndex& index, Conversation
 {
   uint16_t last_group = index.groupCount() - 1;
 
-  ConversationEntry* filler_entry = new ConversationEntryNone();
-  ConversationEntry& previous_entry = getOrAddEntry(*filler_entry, *root_entry, index, last_group);
+  ConversationEntry& previous_entry = getOrAddEntry(*root_entry, index, last_group);
 
-  previous_entry.insertNextEntry(index.groupValue(last_group), entry, *filler_entry);
+  ConversationEntryNone filler_entry;
+  previous_entry.insertNextEntry(index.groupValue(last_group), entry, filler_entry);
+}
 
-  delete filler_entry;
+/**
+ * Loads conversation data from the XML entry.
+ * @param data single packet of XML data
+ * @param index current index within the line, represents which XML element is currently being read
+ */
+void Conversation::load(XmlData data, int index)
+{
+  // The legacy index is using the top level of the event (<conversation>) to
+  // define the entry identifier. This is to support conversion of legacy save files
+  int legacy_index = index - 1;
+
+  // Fetch the string version of the entry index
+  int entry_data_index;
+  std::string entry_string_id;
+  if(data.getElement(index) == kKEY_ENTRY && data.getKey(index) == kKEY_ENTRY_ID)
+  {
+    entry_data_index = index;
+    entry_string_id = data.getKeyValue(index);
+  }
+  else if(data.getElement(legacy_index) == kKEY_ENTRY_LEGACY &&
+          data.getKey(legacy_index) == kKEY_ENTRY_ID)
+  {
+    entry_data_index = legacy_index;
+    entry_string_id = data.getKeyValue(legacy_index);
+  }
+
+  // If its a valid index format for the entry, process it and finish the load
+  if(ConversationEntryIndex::isValidString(entry_string_id))
+  {
+    ConversationEntryIndex entry_id(entry_string_id);
+
+    uint16_t last_group = entry_id.groupCount() - 1;
+    ConversationEntry& previous_entry = getOrAddEntry(*root_entry, entry_id, last_group);
+
+    // Check that the current entry is a TEXT type (only current supported type). If it isn't,
+    // swap it out before loading. Otherwise, just fetch the existing one.
+    ConversationEntry* entry_to_load;
+    uint8_t last_group_value = entry_id.groupValue(last_group);
+    if(previous_entry.getNextEntryCount() <= last_group_value ||
+       previous_entry.getNextEntry(last_group_value).getType() != ConversationEntryType::TEXT)
+    {
+      entry_to_load = new ConversationEntryText();
+
+      ConversationEntryNone filler_entry;
+      previous_entry.setNextEntry(last_group_value, *entry_to_load, filler_entry);
+    }
+    else
+    {
+      entry_to_load = &previous_entry.getNextEntry(last_group_value);
+    }
+
+    // Load the entry details (TODO)
+    //entry_to_load->load(data, entry_data_index + 1);
+  }
+}
+
+/**
+ * Saves all conversation data into the XML writer.
+ * @param writer saving file handler interface
+ */
+void Conversation::save(XmlWriter* writer) const
+{
+  ConversationEntryIndex first_entry_index;
+  save(writer, first_entry_index, getFirstEntry());
 }
 
 /**
@@ -198,10 +293,8 @@ void Conversation::setEntry(const ConversationEntryIndex& index, ConversationEnt
 {
   uint16_t last_group = index.groupCount() - 1;
 
-  ConversationEntry* filler_entry = new ConversationEntryNone();
-  ConversationEntry& previous_entry = getOrAddEntry(*filler_entry, *root_entry, index, last_group);
+  ConversationEntry& previous_entry = getOrAddEntry(*root_entry, index, last_group);
 
-  previous_entry.setNextEntry(index.groupValue(last_group), entry, *filler_entry);
-
-  delete filler_entry;
+  ConversationEntryNone filler_entry;
+  previous_entry.setNextEntry(index.groupValue(last_group), entry, filler_entry);
 }

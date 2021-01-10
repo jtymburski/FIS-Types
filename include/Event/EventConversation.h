@@ -9,16 +9,26 @@
 #define CORE_EVENTCONVERSATION_H
 
 #include "Event/Conversation.h"
-#include "Event/Event.h"
 #include "Event/EventType.h"
+#include "Event/ExecutableEvent.h"
 
 namespace core
 {
-  class EventConversation : public Event
+  class EventConversation : public ExecutableEvent
   {
   private:
     /* Conversation data to display when triggered */
     Conversation conversation;
+
+  /*=============================================================================
+   * PRIVATE FUNCTIONS
+   *============================================================================*/
+  private:
+    /* Loads event data from the XML entry, specific to the event type (sub-class) */
+    void loadForType(std::string element, XmlData data, int index) override;
+
+    /* Saves all event data into the XML writer, specific to the event type (sub-class) */
+    void saveForType(XmlWriter* writer) const override;
 
   /*=============================================================================
    * PUBLIC FUNCTIONS

@@ -10,6 +10,9 @@
 #include "Event/ConversationEntry.h"
 #include "Event/ConversationEntryIndex.h"
 #include "Event/ConversationEntryNone.h"
+#include "Event/ConversationEntryText.h"
+#include "Persistence/XmlData.h"
+#include "Persistence/XmlWriter.h"
 
 namespace core
 {
@@ -26,6 +29,13 @@ namespace core
     /* Starting conversation entry, top of the decision tree */
     ConversationEntry* root_entry = new ConversationEntryNone();
 
+    /*------------------- Constants -----------------------*/
+  private:
+    /* Data storage key names */
+    const static std::string kKEY_ENTRY;
+    const static std::string kKEY_ENTRY_ID;
+    const static std::string kKEY_ENTRY_LEGACY;
+
   /*=============================================================================
    * PRIVATE FUNCTIONS
    *============================================================================*/
@@ -39,10 +49,13 @@ namespace core
                                 uint16_t group_max, uint16_t group = 0) const;
 
     /* Recursive entry fetch to traverse the tree and return the entry at the index or create it */
-    ConversationEntry& getOrAddEntry(ConversationEntry& filler_entry,
-                                     ConversationEntry& previous_entry,
+    ConversationEntry& getOrAddEntry(ConversationEntry& previous_entry,
                                      const ConversationEntryIndex& index,
                                      uint16_t group_max, uint16_t group = 0) const;
+
+    /* Saves an individual conversation entry into the XML writer */
+    void save(XmlWriter* writer, const ConversationEntryIndex& index,
+              ConversationEntry& entry) const;
 
   /*=============================================================================
    * PUBLIC FUNCTIONS
@@ -62,6 +75,12 @@ namespace core
 
     /* Inserts a single entry at the index in the conversation tree */
     void insertEntry(const ConversationEntryIndex& index, ConversationEntry& entry);
+
+    /* Loads conversation data from the XML entry */
+    void load(XmlData data, int index);
+
+    /* Saves all conversation data into the XML writer */
+    void save(XmlWriter* writer) const;
 
     /* Sets a single entry at the index in the conversation tree */
     void setEntry(const ConversationEntryIndex& index, ConversationEntry& entry);
