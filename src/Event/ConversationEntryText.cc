@@ -7,7 +7,14 @@
  * decision and will be maintained until the entries can be remodeled.
  */
 #include "Event/ConversationEntryText.h"
+#include "Event/PersistEvent.h"
 using namespace core;
+
+/* Constant Implementation - see header file for descriptions */
+const std::string ConversationEntryText::kKEY_DELAY = "delay";
+const std::string ConversationEntryText::kKEY_EVENT = "event";
+const std::string ConversationEntryText::kKEY_MESSAGE = "text";
+const std::string ConversationEntryText::kKEY_THING_ID = "id";
 
 /*=============================================================================
  * CONSTRUCTORS / DESTRUCTORS
@@ -70,6 +77,55 @@ int32_t ConversationEntryText::getThingId() const
 ConversationEntryType ConversationEntryText::getType() const
 {
   return ConversationEntryType::TEXT;
+}
+
+/**
+ * Returns if the conversation entry can be saved using {@link save(XmlWriter*)}.
+ * @return TRUE if it will generate save data
+ */
+bool ConversationEntryText::isSaveable() const
+{
+  return true;
+}
+
+/**
+ * Loads conversation entry data from the XML entry.
+ * @param data single packet of XML data
+ * @param index current index within the line, represents which XML element is currently being read
+ */
+void ConversationEntryText::load(XmlData data, int index)
+{
+  std::string element = data.getElement(index);
+
+  if(element == kKEY_DELAY)
+    setDelayMilliseconds(data.getDataIntegerOrThrow());
+  else if(element == kKEY_EVENT)
+    event = PersistEvent::load(event, data, index + 1);
+  else if(element == kKEY_MESSAGE)
+    setMessage(data.getDataStringOrThrow());
+  else if(element == kKEY_THING_ID)
+    setThingId(data.getDataIntegerOrThrow());
+}
+
+/**
+ * Saves all conversation entry data into the XML writer.
+ * @param writer saving file handler interface
+ */
+void ConversationEntryText::save(XmlWriter* writer) const
+{
+  writer->writeData(kKEY_MESSAGE, getMessage());
+
+  if(getThingId() != kINITIATING_THING_ID)
+    writer->writeData(kKEY_THING_ID, getThingId());
+  if(getDelayMilliseconds() > 0)
+    writer->writeData(kKEY_DELAY, getDelayMilliseconds());
+
+  if(event->isSaveable())
+  {
+    writer->writeElement(kKEY_EVENT);
+    PersistEvent::save(event, writer);
+    writer->jumpToParent();
+  }
 }
 
 /**

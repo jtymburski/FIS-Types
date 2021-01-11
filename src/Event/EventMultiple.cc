@@ -5,6 +5,7 @@
  * when this event is triggered.
  */
 #include "Event/EventMultiple.h"
+#include "Event/PersistEvent.h"
 using namespace core;
 
 /* Constant Implementation - see header file for descriptions */

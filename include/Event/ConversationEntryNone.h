@@ -17,6 +17,15 @@ namespace core
   public:
     /* Returns entry type classification */
     ConversationEntryType getType() const override;
+
+    /* Returns if the conversation entry can be saved */
+    bool isSaveable() const override;
+
+    /* Loads conversation entry data from the XML entry */
+    void load(XmlData data, int index) override;
+
+    /* Saves all conversation entry data into the XML writer */
+    void save(XmlWriter* writer) const override;
   };
 };
 

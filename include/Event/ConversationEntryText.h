@@ -39,9 +39,15 @@ namespace core
     int32_t thing_id = kINITIATING_THING_ID;
 
     /*------------------- Constants -----------------------*/
-
+  private:
     /* Special ID for the initiating thing (event source) */
     const static int32_t kINITIATING_THING_ID = -1;
+
+    /* Data storage key names */
+    const static std::string kKEY_DELAY;
+    const static std::string kKEY_EVENT;
+    const static std::string kKEY_MESSAGE;
+    const static std::string kKEY_THING_ID;
 
   /*=============================================================================
    * PUBLIC FUNCTIONS
@@ -61,6 +67,15 @@ namespace core
 
     /* Returns entry type classification */
     ConversationEntryType getType() const override;
+
+    /* Returns if the conversation entry can be saved */
+    bool isSaveable() const override;
+
+    /* Loads conversation entry data from the XML entry */
+    void load(XmlData data, int index) override;
+
+    /* Saves all conversation entry data into the XML writer */
+    void save(XmlWriter* writer) const override;
 
     /* Sets the delay time for the message to be displayed, in milliseconds */
     void setDelayMilliseconds(uint32_t delay_ms);

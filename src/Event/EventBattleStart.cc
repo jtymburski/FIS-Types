@@ -5,6 +5,7 @@
  * up around the current player.
  */
 #include "Event/EventBattleStart.h"
+#include "Event/PersistEvent.h"
 using namespace core;
 
 /* Constant Implementation - see header file for descriptions */

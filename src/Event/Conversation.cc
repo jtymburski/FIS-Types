@@ -122,10 +122,10 @@ void Conversation::save(XmlWriter* writer, const ConversationEntryIndex& index,
                         ConversationEntry& entry) const
 {
   // Save the current entry
-  if(entry.getType() == ConversationEntryType::TEXT)
+  if(entry.isSaveable())
   {
     writer->writeElement(kKEY_ENTRY, kKEY_ENTRY_ID, index.toString());
-    //entry.save(writer); // TODO
+    entry.save(writer);
     writer->jumpToParent();
   }
 
@@ -268,8 +268,8 @@ void Conversation::load(XmlData data, int index)
       entry_to_load = &previous_entry.getNextEntry(last_group_value);
     }
 
-    // Load the entry details (TODO)
-    //entry_to_load->load(data, entry_data_index + 1);
+    // Load the entry details
+    entry_to_load->load(data, entry_data_index + 1);
   }
 }
 

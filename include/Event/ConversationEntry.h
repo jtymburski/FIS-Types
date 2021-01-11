@@ -11,6 +11,8 @@
 #include <vector>
 
 #include "Event/ConversationEntryType.h"
+#include "Persistence/XmlData.h"
+#include "Persistence/XmlWriter.h"
 
 namespace core
 {
@@ -49,6 +51,15 @@ namespace core
 
     /* Inserts a single entry following this entry at the given index in the vector */
     void insertNextEntry(uint8_t index, ConversationEntry& entry, ConversationEntry& filler_entry);
+
+    /* Returns if the event can be saved */
+    virtual bool isSaveable() const = 0;
+
+    /* Loads event data from the XML entry */
+    virtual void load(XmlData data, int index) = 0;
+
+    /* Saves all event data into the XML writer */
+    virtual void save(XmlWriter* writer) const = 0;
 
     /* Sets a single entry following this entry at the given index in the vector */
     void setNextEntry(uint8_t index, ConversationEntry& entry, ConversationEntry& filler_entry);

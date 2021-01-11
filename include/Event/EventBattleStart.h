@@ -10,7 +10,6 @@
 #include "Event/EventNone.h"
 #include "Event/EventType.h"
 #include "Event/ExecutableEvent.h"
-#include "Event/PersistEvent.h"
 
 namespace core
 {
