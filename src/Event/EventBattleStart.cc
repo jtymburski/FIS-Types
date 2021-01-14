@@ -21,6 +21,20 @@ const std::string EventBattleStart::kKEY_TARGET_HIDE_ON_WIN = "windisappear";
  *============================================================================*/
 
 /**
+ * Default constructor.
+ */
+EventBattleStart::EventBattleStart() {}
+
+/**
+ * Copy constructor, duplicates the existing source in new memory.
+ * @param source object to copy
+ */
+EventBattleStart::EventBattleStart(const EventBattleStart& source)
+{
+  cloneSource(source);
+}
+
+/**
  * Destructor function, cleans up any dynamically assigned memory managed in the class.
  */
 EventBattleStart::~EventBattleStart()
@@ -32,6 +46,25 @@ EventBattleStart::~EventBattleStart()
 /*=============================================================================
  * PRIVATE FUNCTIONS
  *============================================================================*/
+
+/**
+ * Copy function. This duplicates (new memory) the source objects and replaces them in the
+ * existing class. All existing objects will be overriden.
+ * @param source object to copy
+ */
+void EventBattleStart::cloneSource(const EventBattleStart& source)
+{
+  delete event_lose;
+  event_lose = source.event_lose->clone();
+
+  delete event_win;
+  event_win = source.event_win->clone();
+
+  game_over_on_loss = source.game_over_on_loss;
+  restore_health = source.restore_health;
+  restore_qd = source.restore_qd;
+  target_hide_on_win = source.target_hide_on_win;
+}
 
 /**
  * Loads event data from the XML entry, specific to the event type (sub-class).
@@ -88,6 +121,15 @@ void EventBattleStart::saveForType(XmlWriter* writer) const
 /*=============================================================================
  * PUBLIC FUNCTIONS
  *============================================================================*/
+
+/**
+ * Deep clones the event to return a new memory space version of the same data.
+ * @return newly created event
+ */
+Event* EventBattleStart::clone() const
+{
+  return new EventBattleStart(*this);
+}
 
 /**
  * Returns the event triggered on battle loss.
@@ -206,4 +248,20 @@ void EventBattleStart::setWinEvent(Event& event)
 {
   delete this->event_win;
   this->event_win = &event;
+}
+
+/*=============================================================================
+ * OPERATOR FUNCTIONS
+ *============================================================================*/
+
+/**
+ * Copy assignment operator, duplicates the existing source in new memory.
+ * @param source object to copy
+ * @return copied object, new memory
+ */
+EventBattleStart& EventBattleStart::operator=(const EventBattleStart& source)
+{
+  if(&source != this)
+    cloneSource(source);
+  return *this;
 }

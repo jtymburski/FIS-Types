@@ -55,6 +55,15 @@ void EventItemGive::saveForType(XmlWriter* writer) const
  *============================================================================*/
 
 /**
+ * Deep clones the event to return a new memory space version of the same data.
+ * @return newly created event
+ */
+Event* EventItemGive::clone() const
+{
+  return new EventItemGive(*this);
+}
+
+/**
  * Returns the chance of the item being given when the event is executed.
  * @return percent chance, between 0 and {@link #kMAX_CHANCE}
  */

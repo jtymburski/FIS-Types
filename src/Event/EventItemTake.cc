@@ -44,6 +44,15 @@ void EventItemTake::saveForType(XmlWriter* writer) const
  *============================================================================*/
 
 /**
+ * Deep clones the event to return a new memory space version of the same data.
+ * @return newly created event
+ */
+Event* EventItemTake::clone() const
+{
+  return new EventItemTake(*this);
+}
+
+/**
  * Returns the item count to take for the event.
  * @return item count. If set to 0, nothing will be taken.
  */

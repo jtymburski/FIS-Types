@@ -55,6 +55,15 @@ void EventTeleport::saveForType(XmlWriter* writer) const
  *============================================================================*/
 
 /**
+ * Deep clones the event to return a new memory space version of the same data.
+ * @return newly created event
+ */
+Event* EventTeleport::clone() const
+{
+  return new EventTeleport(*this);
+}
+
+/**
  * Returns the map section ID within the current map.
  * @return section within the map, < 0 is current section where event was triggered
  */

@@ -21,6 +21,12 @@ namespace core
   class EventMultiple : public ExecutableEvent
   {
   public:
+    /* Default constructor */
+    EventMultiple();
+
+    /* Copy constructor */
+    EventMultiple(const EventMultiple& source);
+
     /* Destructor function */
     ~EventMultiple() override;
 
@@ -41,6 +47,9 @@ namespace core
    * PRIVATE FUNCTIONS
    *============================================================================*/
   private:
+    /* Copy function, to be called by a copy constructor or assignment operator */
+    void cloneSource(const EventMultiple& source);
+
     /* Deletes all events stored in the list */
     void deleteEvents();
 
@@ -54,6 +63,9 @@ namespace core
    * PUBLIC FUNCTIONS
    *============================================================================*/
   public:
+    /* Deep clones the event to return a new memory space version of the same data */
+    Event* clone() const override;
+
     /* Returns the event in the multiple stack at the index location */
     Event& getEvent(uint8_t index);
 
@@ -65,6 +77,12 @@ namespace core
 
     /* Sets the event in the multiple stack at the index location */
     void setEvent(uint8_t index, Event& event);
+
+  /*=============================================================================
+   * OPERATOR FUNCTIONS
+   *============================================================================*/
+  public:
+    EventMultiple& operator=(const EventMultiple& source);
   };
 };
 

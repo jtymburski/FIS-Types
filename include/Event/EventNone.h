@@ -14,6 +14,9 @@ namespace core
   class EventNone : public Event
   {
   public:
+    /* Deep clones the event to return a new memory space version of the same data */
+    Event* clone() const override;
+
     /* Returns event type classification */
     EventType getType() const override;
 

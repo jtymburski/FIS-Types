@@ -34,6 +34,9 @@ namespace core
    * PUBLIC FUNCTIONS
    *============================================================================*/
   public:
+    /* Deep clones the event to return a new memory space version of the same data */
+    Event* clone() const override;
+
     /* Returns the conversation data to display when triggered */
     Conversation& getConversation();
 

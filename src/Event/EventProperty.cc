@@ -152,6 +152,15 @@ void EventProperty::saveForType(XmlWriter* writer) const
  *============================================================================*/
 
 /**
+ * Deep clones the event to return a new memory space version of the same data.
+ * @return newly created event
+ */
+Event* EventProperty::clone() const
+{
+  return new EventProperty(*this);
+}
+
+/**
  * Returns the time to return to the previous state in the interactive object if inactive.
  * @return inactivate timeout in milliseconds
  */

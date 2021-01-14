@@ -40,6 +40,15 @@ void EventMapSwitch::saveForType(XmlWriter* writer) const
  *============================================================================*/
 
 /**
+ * Deep clones the event to return a new memory space version of the same data.
+ * @return newly created event
+ */
+Event* EventMapSwitch::clone() const
+{
+  return new EventMapSwitch(*this);
+}
+
+/**
  * Returns the map ID that would become active when the event is triggered.
  * @return map reference ID
  */

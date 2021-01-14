@@ -40,6 +40,15 @@ void EventUnlockThing::saveForUnlock(XmlWriter* writer) const
  *============================================================================*/
 
 /**
+ * Deep clones the event to return a new memory space version of the same data.
+ * @return newly created event
+ */
+Event* EventUnlockThing::clone() const
+{
+  return new EventUnlockThing(*this);
+}
+
+/**
  * Returns the thing ID that is unlocked by this event. If set to {@link #kINITIATING_THING_ID},
  * it will be set to unlock the initiating thing.
  * @return thing reference ID

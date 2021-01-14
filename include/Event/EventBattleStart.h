@@ -16,6 +16,12 @@ namespace core
   class EventBattleStart : public ExecutableEvent
   {
   public:
+    /* Default constructor */
+    EventBattleStart();
+
+    /* Copy constructor */
+    EventBattleStart(const EventBattleStart& source);
+
     /* Destructor function */
     ~EventBattleStart() override;
 
@@ -52,6 +58,9 @@ namespace core
    * PRIVATE FUNCTIONS
    *============================================================================*/
   private:
+    /* Copy function, to be called by a copy constructor or assignment operator */
+    void cloneSource(const EventBattleStart& source);
+
     /* Loads event data from the XML entry, specific to the event type (sub-class) */
     void loadForType(std::string element, XmlData data, int index) override;
 
@@ -62,6 +71,9 @@ namespace core
    * PUBLIC FUNCTIONS
    *============================================================================*/
   public:
+    /* Deep clones the event to return a new memory space version of the same data */
+    Event* clone() const override;
+
     /* Returns the event triggered on battle loss */
     Event& getLoseEvent() const;
 
@@ -100,6 +112,12 @@ namespace core
 
     /* Sets the event triggered on battle win */
     void setWinEvent(Event& event);
+
+  /*=============================================================================
+   * OPERATOR FUNCTIONS
+   *============================================================================*/
+  public:
+    EventBattleStart& operator=(const EventBattleStart& source);
   };
 };
 

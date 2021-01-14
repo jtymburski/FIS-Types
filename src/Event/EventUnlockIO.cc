@@ -91,6 +91,15 @@ void EventUnlockIO::saveForUnlock(XmlWriter* writer) const
  *============================================================================*/
 
 /**
+ * Deep clones the event to return a new memory space version of the same data.
+ * @return newly created event
+ */
+Event* EventUnlockIO::clone() const
+{
+  return new EventUnlockIO(*this);
+}
+
+/**
  * Returns the interactive object ID that is unlocked by this event. If set to
  * {@link #kINITIATING_IO_ID}, it will be set to unlock the initiating interactive object.
  * @return interactive object reference ID

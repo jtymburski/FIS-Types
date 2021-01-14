@@ -19,6 +19,20 @@ const std::regex EventMultiple::kPOSITIVE_INTEGER_FORMAT("^\\d+$");
  *============================================================================*/
 
 /**
+ * Default constructor.
+ */
+EventMultiple::EventMultiple() {}
+
+/**
+ * Copy constructor, duplicates the existing source in new memory.
+ * @param source object to copy
+ */
+EventMultiple::EventMultiple(const EventMultiple& source)
+{
+  cloneSource(source);
+}
+
+/**
  * Destructor function, cleans up any dynamically assigned memory managed in the class.
  */
 EventMultiple::~EventMultiple()
@@ -29,6 +43,18 @@ EventMultiple::~EventMultiple()
 /*=============================================================================
  * PRIVATE FUNCTIONS
  *============================================================================*/
+
+/**
+ * Copy function. This duplicates (new memory) the source objects and replaces them in the
+ * existing class. All existing objects will be overriden.
+ * @param source object to copy
+ */
+void EventMultiple::cloneSource(const EventMultiple& source)
+{
+  deleteEvents();
+  for (auto event : source.events)
+    events.push_back(event->clone());
+}
 
 /**
  * Deletes all event references in the trigger list and clears it. After execution,
@@ -92,6 +118,15 @@ void EventMultiple::saveForType(XmlWriter* writer) const
  *============================================================================*/
 
 /**
+ * Deep clones the event to return a new memory space version of the same data.
+ * @return newly created event
+ */
+Event* EventMultiple::clone() const
+{
+  return new EventMultiple(*this);
+}
+
+/**
  * Returns the event in the multiple stack at the index location.
  * @param index ordered list location
  * @return event reference at the given index. will throw exception if out of range
@@ -134,4 +169,20 @@ void EventMultiple::setEvent(uint8_t index, Event& event)
 
   delete events[index];
   events[index] = &event;
+}
+
+/*=============================================================================
+ * OPERATOR FUNCTIONS
+ *============================================================================*/
+
+/**
+ * Copy assignment operator, duplicates the existing source in new memory.
+ * @param source object to copy
+ * @return copied object, new memory
+ */
+EventMultiple& EventMultiple::operator=(const EventMultiple& source)
+{
+  if(&source != this)
+    cloneSource(source);
+  return *this;
 }

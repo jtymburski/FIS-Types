@@ -11,6 +11,15 @@ using namespace core;
  *============================================================================*/
 
 /**
+ * Deep clones the event to return a new memory space version of the same data.
+ * @return newly created event
+ */
+Event* EventNone::clone() const
+{
+  return new EventNone(*this);
+}
+
+/**
  * Returns {@link EventType#NONE} to define the type classification, overrides parent.
  * @return event type classification enum
  */

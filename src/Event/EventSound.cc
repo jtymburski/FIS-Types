@@ -37,6 +37,15 @@ void EventSound::saveForType(XmlWriter*) const
  *============================================================================*/
 
 /**
+ * Deep clones the event to return a new memory space version of the same data.
+ * @return newly created event
+ */
+Event* EventSound::clone() const
+{
+  return new EventSound(*this);
+}
+
+/**
  * Returns {@link EventType#SOUND} to define the type classification, overrides parent.
  * @return event type classification enum
  */

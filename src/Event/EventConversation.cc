@@ -37,6 +37,15 @@ void EventConversation::saveForType(XmlWriter* writer) const
  *============================================================================*/
 
 /**
+ * Deep clones the event to return a new memory space version of the same data.
+ * @return newly created event
+ */
+Event* EventConversation::clone() const
+{
+  return new EventConversation(*this);
+}
+
+/**
  * Returns the conversation data to display when triggered.
  * @return definition to display and trigger in game
  */

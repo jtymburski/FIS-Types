@@ -43,6 +43,15 @@ void EventNotification::saveForType(XmlWriter* writer) const
  *============================================================================*/
 
 /**
+ * Deep clones the event to return a new memory space version of the same data.
+ * @return newly created event
+ */
+Event* EventNotification::clone() const
+{
+  return new EventNotification(*this);
+}
+
+/**
  * Returns the text string for the notification.
  * @return ascii supported text for UI display
  */

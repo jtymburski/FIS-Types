@@ -40,6 +40,15 @@ void EventTriggerIO::saveForType(XmlWriter* writer) const
  *============================================================================*/
 
 /**
+ * Deep clones the event to return a new memory space version of the same data.
+ * @return newly created event
+ */
+Event* EventTriggerIO::clone() const
+{
+  return new EventTriggerIO(*this);
+}
+
+/**
  * Returns the interactive object ID to trigger by the event.
  * @return reference interactive object ID
  */

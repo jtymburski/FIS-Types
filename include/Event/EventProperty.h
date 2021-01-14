@@ -107,6 +107,9 @@ namespace core
    * PUBLIC FUNCTIONS
    *============================================================================*/
   public:
+    /* Deep clones the event to return a new memory space version of the same data */
+    Event* clone() const override;
+
     /* Returns the time to return to the previous state in the interactive object if inactive */
     uint32_t getIOStateInactiveMillis() const;
 

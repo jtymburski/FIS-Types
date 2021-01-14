@@ -44,6 +44,9 @@ namespace core
    * PUBLIC FUNCTIONS
    *============================================================================*/
   public:
+    /* Deep clones the event to return a new memory space version of the same data */
+    Event* clone() const override;
+
     /* Returns the interactive object ID to trigger by the event */
     int32_t getInteractiveObjectId() const;
 
