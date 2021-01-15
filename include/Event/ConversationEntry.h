@@ -19,6 +19,12 @@ namespace core
   class ConversationEntry
   {
   public:
+    /* Default constructor */
+    ConversationEntry();
+
+    /* Copy constructor */
+    ConversationEntry(const ConversationEntry& source);
+
     /* Destructor function */
     virtual ~ConversationEntry();
 
@@ -30,6 +36,12 @@ namespace core
    * PRIVATE FUNCTIONS
    *============================================================================*/
   private:
+    /* Copy function, to be called by a copy constructor or assignment operator */
+    void cloneSource(const ConversationEntry& source);
+
+    /* Deletes all next entries stored in the list */
+    void deleteNextEntries();
+
     /* Pad set of next entries up to the index using the filler */
     void padNextEntries(uint8_t index, ConversationEntry& filler_entry);
 
@@ -37,6 +49,9 @@ namespace core
    * PUBLIC FUNCTIONS
    *============================================================================*/
   public:
+    /* Deep clones the entry to return a new memory space version of the same data */
+    virtual ConversationEntry* clone() const = 0;
+
     /* Deletes a single entry following this entry at the given index in the vector */
     void deleteNextEntry(uint8_t index);
 
@@ -63,6 +78,12 @@ namespace core
 
     /* Sets a single entry following this entry at the given index in the vector */
     void setNextEntry(uint8_t index, ConversationEntry& entry, ConversationEntry& filler_entry);
+
+  /*=============================================================================
+   * OPERATOR FUNCTIONS
+   *============================================================================*/
+  public:
+    ConversationEntry& operator=(const ConversationEntry& source);
   };
 };
 

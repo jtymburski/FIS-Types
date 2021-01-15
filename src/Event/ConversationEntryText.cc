@@ -21,6 +21,21 @@ const std::string ConversationEntryText::kKEY_THING_ID = "id";
  *============================================================================*/
 
 /**
+ * Default constructor.
+ */
+ConversationEntryText::ConversationEntryText() {}
+
+/**
+ * Copy constructor, duplicates the existing source in new memory.
+ * @param source object to copy
+ */
+ConversationEntryText::ConversationEntryText(const ConversationEntryText& source)
+                     : ConversationEntry(source)
+{
+  cloneSource(source);
+}
+
+/**
  * Destructor function, cleans up any dynamically assigned memory managed in the class.
  */
 ConversationEntryText::~ConversationEntryText()
@@ -29,8 +44,37 @@ ConversationEntryText::~ConversationEntryText()
 }
 
 /*=============================================================================
+ * PRIVATE FUNCTIONS
+ *============================================================================*/
+
+/**
+ * Copy function. This duplicates (new memory) the source objects and replaces them in the
+ * existing class. All existing objects will be overriden.
+ * @param source object to copy
+ */
+void ConversationEntryText::cloneSource(const ConversationEntryText& source)
+{
+  delay_ms = source.delay_ms;
+
+  delete event;
+  event = source.event->clone();
+
+  message = source.message;
+  thing_id = source.thing_id;
+}
+
+/*=============================================================================
  * PUBLIC FUNCTIONS
  *============================================================================*/
+
+/**
+ * Deep clones the entry to return a new memory space version of the same data.
+ * @return newly created event
+ */
+ConversationEntry* ConversationEntryText::clone() const
+{
+  return new ConversationEntryText(*this);
+}
 
 /**
  * Returns the delay time for the message to be displayed. This is the amount of time the
@@ -165,4 +209,22 @@ void ConversationEntryText::setMessage(std::string message)
 void ConversationEntryText::setThingId(int32_t thing_id)
 {
   this->thing_id = thing_id;
+}
+
+/*=============================================================================
+ * OPERATOR FUNCTIONS
+ *============================================================================*/
+
+/**
+ * Copy assignment operator, duplicates the existing source in new memory.
+ * @param source object to copy
+ * @return copied object, new memory
+ */
+ConversationEntryText& ConversationEntryText::operator=(const ConversationEntryText& source)
+{
+  ConversationEntry::operator=(source);
+
+  if(&source != this)
+    cloneSource(source);
+  return *this;
 }

@@ -12,6 +12,15 @@ using namespace core;
  *============================================================================*/
 
 /**
+ * Deep clones the entry to return a new memory space version of the same data.
+ * @return newly created event
+ */
+ConversationEntry* ConversationEntryNone::clone() const
+{
+  return new ConversationEntryNone(*this);
+}
+
+/**
  * Returns {@link ConversationEntryType#NONE} to define the type classification, overrides parent.
  * @return entry type classification enum
  */

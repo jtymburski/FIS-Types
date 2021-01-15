@@ -12,17 +12,53 @@ using namespace core;
  *============================================================================*/
 
 /**
+ * Default constructor.
+ */
+ConversationEntry::ConversationEntry() {}
+
+/**
+ * Copy constructor, duplicates the existing source in new memory.
+ * @param source object to copy
+ */
+ConversationEntry::ConversationEntry(const ConversationEntry& source)
+{
+  cloneSource(source);
+}
+
+/**
  * Destructor function, cleans up any dynamically assigned memory managed in the class.
  */
 ConversationEntry::~ConversationEntry()
 {
-  for(auto &entry : next_entries)
-    delete entry;
+  deleteNextEntries();
 }
 
 /*=============================================================================
  * PRIVATE FUNCTIONS
  *============================================================================*/
+
+/**
+ * Copy function. This duplicates (new memory) the source objects and replaces them in the
+ * existing class. All existing objects will be overriden.
+ * @param source object to copy
+ */
+void ConversationEntry::cloneSource(const ConversationEntry& source)
+{
+  deleteNextEntries();
+  for(auto entry : source.next_entries)
+    next_entries.push_back(entry->clone());
+}
+
+/**
+ * Deletes all next entry references in the list and clears it. After execution,
+ * no entries will remain.
+ */
+void ConversationEntry::deleteNextEntries()
+{
+  for(auto &entry : next_entries)
+    delete entry;
+  next_entries.clear();
+}
 
 /**
  * Pad set of next entries up to the index using the filler. This will copy the filler
@@ -135,4 +171,20 @@ void ConversationEntry::setNextEntry(uint8_t index, ConversationEntry& entry,
     delete next_entries[index];
     next_entries[index] = &entry;
   }
+}
+
+/*=============================================================================
+ * OPERATOR FUNCTIONS
+ *============================================================================*/
+
+/**
+ * Copy assignment operator, duplicates the existing source in new memory.
+ * @param source object to copy
+ * @return copied object, new memory
+ */
+ConversationEntry& ConversationEntry::operator=(const ConversationEntry& source)
+{
+  if(&source != this)
+    cloneSource(source);
+  return *this;
 }

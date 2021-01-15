@@ -22,6 +22,12 @@ namespace core
   class ConversationEntryText : public ConversationEntry
   {
   public:
+    /* Default constructor */
+    ConversationEntryText();
+
+    /* Copy constructor */
+    ConversationEntryText(const ConversationEntryText& source);
+
     /* Destructor function */
     ~ConversationEntryText() override;
 
@@ -50,9 +56,19 @@ namespace core
     const static std::string kKEY_THING_ID;
 
   /*=============================================================================
+   * PRIVATE FUNCTIONS
+   *============================================================================*/
+  private:
+    /* Copy function, to be called by a copy constructor or assignment operator */
+    void cloneSource(const ConversationEntryText& source);
+
+  /*=============================================================================
    * PUBLIC FUNCTIONS
    *============================================================================*/
   public:
+    /* Deep clones the entry to return a new memory space version of the same data */
+    ConversationEntry* clone() const override;
+
     /* Returns the delay time for the message to be displayed, in milliseconds */
     uint32_t getDelayMilliseconds() const;
 
@@ -88,6 +104,12 @@ namespace core
 
     /* Sets the thing ID that is presenting the message */
     void setThingId(int32_t thing_id);
+
+  /*=============================================================================
+   * OPERATOR FUNCTIONS
+   *============================================================================*/
+  public:
+    ConversationEntryText& operator=(const ConversationEntryText& source);
   };
 };
 

@@ -22,6 +22,9 @@ namespace core
     /* Constructor function */
     Conversation();
 
+    /* Copy constructor */
+    Conversation(const Conversation& source);
+
     /* Destructor function */
     ~Conversation();
 
@@ -40,6 +43,9 @@ namespace core
    * PRIVATE FUNCTIONS
    *============================================================================*/
   private:
+    /* Copy function, to be called by a copy constructor or assignment operator */
+    void cloneSource(const Conversation& source);
+
     /* Create the first entry, if one doesn't exist */
     void createFirstEntry();
 
@@ -84,6 +90,12 @@ namespace core
 
     /* Sets a single entry at the index in the conversation tree */
     void setEntry(const ConversationEntryIndex& index, ConversationEntry& entry);
+
+  /*=============================================================================
+   * OPERATOR FUNCTIONS
+   *============================================================================*/
+  public:
+    Conversation& operator=(const Conversation& source);
   };
 };
 

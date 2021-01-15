@@ -15,6 +15,9 @@ namespace core
   class ConversationEntryNone : public ConversationEntry
   {
   public:
+    /* Deep clones the entry to return a new memory space version of the same data */
+    ConversationEntry* clone() const override;
+
     /* Returns entry type classification */
     ConversationEntryType getType() const override;
 

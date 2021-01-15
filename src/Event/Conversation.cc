@@ -25,6 +25,15 @@ Conversation::Conversation()
 }
 
 /**
+ * Copy constructor, duplicates the existing source in new memory.
+ * @param source object to copy
+ */
+Conversation::Conversation(const Conversation& source)
+{
+  cloneSource(source);
+}
+
+/**
  * Destructor function, cleans up any dynamically assigned memory managed in the class.
  */
 Conversation::~Conversation()
@@ -35,6 +44,17 @@ Conversation::~Conversation()
 /*=============================================================================
  * PRIVATE FUNCTIONS
  *============================================================================*/
+
+/**
+ * Copy function. This duplicates (new memory) the source objects and replaces them in the
+ * existing class. All existing objects will be overriden.
+ * @param source object to copy
+ */
+void Conversation::cloneSource(const Conversation& source)
+{
+  delete root_entry;
+  root_entry = source.root_entry->clone();
+}
 
 /**
  * Create the first entry, if one doesn't exist. The first entry should always exist, be a
@@ -297,4 +317,20 @@ void Conversation::setEntry(const ConversationEntryIndex& index, ConversationEnt
 
   ConversationEntryNone filler_entry;
   previous_entry.setNextEntry(index.groupValue(last_group), entry, filler_entry);
+}
+
+/*=============================================================================
+ * OPERATOR FUNCTIONS
+ *============================================================================*/
+
+/**
+ * Copy assignment operator, duplicates the existing source in new memory.
+ * @param source object to copy
+ * @return copied object, new memory
+ */
+Conversation& Conversation::operator=(const Conversation& source)
+{
+  if(&source != this)
+    cloneSource(source);
+  return *this;
 }
