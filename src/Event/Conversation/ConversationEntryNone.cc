@@ -4,7 +4,7 @@
  * A no-op conversation entry that should not be displayed. If at the end of a sequence,
  * the conversation should end.
  */
-#include "Event/ConversationEntryNone.h"
+#include "Event/Conversation/ConversationEntryNone.h"
 using namespace core;
 
 /*=============================================================================

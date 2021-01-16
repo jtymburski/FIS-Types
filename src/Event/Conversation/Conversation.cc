@@ -4,7 +4,7 @@
  * A conversation is one fully contained set of entries that are displayed to communicate
  * to the player through a dynamic content presentation system.
  */
-#include "Event/Conversation.h"
+#include "Event/Conversation/Conversation.h"
 using namespace core;
 
 /* Constant Implementation - see header file for descriptions */

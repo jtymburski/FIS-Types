@@ -6,7 +6,7 @@
  * by branching at an entry with the options on the next entries. This simplification was a legacy
  * decision and will be maintained until the entries can be remodeled.
  */
-#include "Event/ConversationEntryText.h"
+#include "Event/Conversation/ConversationEntryText.h"
 #include "Event/PersistEvent.h"
 using namespace core;
 

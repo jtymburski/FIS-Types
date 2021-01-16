@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-#include "Event/ConversationEntryType.h"
+#include "Event/Conversation/ConversationEntryType.h"
 #include "Persistence/XmlData.h"
 #include "Persistence/XmlWriter.h"
 

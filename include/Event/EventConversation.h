@@ -8,7 +8,7 @@
 #ifndef CORE_EVENTCONVERSATION_H
 #define CORE_EVENTCONVERSATION_H
 
-#include "Event/Conversation.h"
+#include "Event/Conversation/Conversation.h"
 #include "Event/EventType.h"
 #include "Event/ExecutableEvent.h"
 

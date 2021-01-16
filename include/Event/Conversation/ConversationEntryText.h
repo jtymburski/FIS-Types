@@ -12,8 +12,8 @@
 #include <cstdint>
 #include <string>
 
-#include "Event/ConversationEntry.h"
-#include "Event/ConversationEntryType.h"
+#include "Event/Conversation/ConversationEntry.h"
+#include "Event/Conversation/ConversationEntryType.h"
 #include "Event/Event.h"
 #include "Event/EventNone.h"
 

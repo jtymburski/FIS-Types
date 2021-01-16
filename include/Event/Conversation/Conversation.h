@@ -7,10 +7,10 @@
 #ifndef CORE_CONVERSATION_H
 #define CORE_CONVERSATION_H
 
-#include "Event/ConversationEntry.h"
-#include "Event/ConversationEntryIndex.h"
-#include "Event/ConversationEntryNone.h"
-#include "Event/ConversationEntryText.h"
+#include "Event/Conversation/ConversationEntry.h"
+#include "Event/Conversation/ConversationEntryIndex.h"
+#include "Event/Conversation/ConversationEntryNone.h"
+#include "Event/Conversation/ConversationEntryText.h"
 #include "Persistence/XmlData.h"
 #include "Persistence/XmlWriter.h"
 

@@ -4,7 +4,7 @@
  * The conversation entry is a single node in the entry decision tree. It is the base abstract
  * definition which can easily be extended to handle various entry use cases
  */
-#include "Event/ConversationEntry.h"
+#include "Event/Conversation/ConversationEntry.h"
 using namespace core;
 
 /*=============================================================================

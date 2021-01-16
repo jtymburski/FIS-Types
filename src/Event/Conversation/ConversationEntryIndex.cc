@@ -5,7 +5,7 @@
  * into accessible values. The focus here is single directional, takes the string form
  * and parses to generate the usable index data.
  */
-#include "Event/ConversationEntryIndex.h"
+#include "Event/Conversation/ConversationEntryIndex.h"
 using namespace core;
 
 /* Constant Implementation - see header file for descriptions */

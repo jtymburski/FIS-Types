@@ -32,6 +32,7 @@ INCLUDES := -Iinclude
 SRC_DIR := src
 SRC_FILE_DIRS := $(SRC_DIR) \
                  $(SRC_DIR)/Event \
+                 $(SRC_DIR)/Event/Conversation \
                  $(SRC_DIR)/Foundation \
                  $(SRC_DIR)/Parser \
                  $(SRC_DIR)/Persistence

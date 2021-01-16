@@ -7,8 +7,8 @@
 #ifndef CORE_CONVERSATIONENTRYNONE_H
 #define CORE_CONVERSATIONENTRYNONE_H
 
-#include "Event/ConversationEntry.h"
-#include "Event/ConversationEntryType.h"
+#include "Event/Conversation/ConversationEntry.h"
+#include "Event/Conversation/ConversationEntryType.h"
 
 namespace core
 {
