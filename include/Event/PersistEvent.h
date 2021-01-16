@@ -43,6 +43,7 @@ namespace core
     const static std::string kKEY_TYPE_ITEMTAKE;
     const static std::string kKEY_TYPE_MAPSWITCH;
     const static std::string kKEY_TYPE_MULTIPLE;
+    const static std::string kKEY_TYPE_NONE;
     const static std::string kKEY_TYPE_NOTIFICATION;
     const static std::string kKEY_TYPE_PROPERTY;
     const static std::string kKEY_TYPE_SOUND;
@@ -59,6 +60,13 @@ namespace core
     const static std::map<EventType, std::string> kTYPE_TO_STRING;
 
   /*=============================================================================
+   * PRIVATE STATIC FUNCTIONS
+   *============================================================================*/
+  private:
+    /* Create an empty event of the given type */
+    static Event* createEventFromType(EventType type);
+
+  /*=============================================================================
    * PUBLIC STATIC FUNCTIONS
    *============================================================================*/
   public:
@@ -66,14 +74,7 @@ namespace core
     static Event* load(Event* event, XmlData data, int index);
 
     /* Saves all event data into the XML writer */
-    static void save(Event* event, XmlWriter* writer);
-
-  /*=============================================================================
-   * PRIVATE STATIC FUNCTIONS
-   *============================================================================*/
-  private:
-    /* Create an empty event of the given type */
-    static Event* createEventFromType(EventType type);
+    static void save(Event* event, XmlWriter* writer, bool save_if_invalid = false);
   };
 };
 

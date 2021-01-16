@@ -10,6 +10,7 @@ using namespace core;
 
 /* Constant Implementation - see header file for descriptions */
 const std::string PersistLock::kKEY_TYPE_ITEM = "item";
+const std::string PersistLock::kKEY_TYPE_NONE = "none";
 const std::string PersistLock::kKEY_TYPE_TRIGGER = "trigger";
 
 /**
@@ -17,6 +18,7 @@ const std::string PersistLock::kKEY_TYPE_TRIGGER = "trigger";
  */
 const std::map<std::string, LockType> PersistLock::kTYPE_FROM_STRING = {
   { kKEY_TYPE_ITEM,    LockType::ITEM    },
+  { kKEY_TYPE_NONE,    LockType::NONE    },
   { kKEY_TYPE_TRIGGER, LockType::TRIGGER }
 };
 
@@ -25,6 +27,7 @@ const std::map<std::string, LockType> PersistLock::kTYPE_FROM_STRING = {
  */
 const std::map<LockType, std::string> PersistLock::kTYPE_TO_STRING = {
   { LockType::ITEM,    kKEY_TYPE_ITEM    },
+  { LockType::NONE,    kKEY_TYPE_NONE    },
   { LockType::TRIGGER, kKEY_TYPE_TRIGGER }
 };
 
@@ -42,6 +45,8 @@ Lock* PersistLock::createLockFromType(LockType type)
   switch(type) {
     case LockType::ITEM:
       return new LockItem();
+    case LockType::NONE:
+      return new LockNone();
     case LockType::TRIGGER:
       return new LockTrigger();
     default:
@@ -91,10 +96,11 @@ Lock* PersistLock::load(Lock* lock, XmlData data, int index)
  * Saves the individual lock data into the XML writer.
  * @param lock persist ready lock object
  * @param writer saving file handler interface
+ * @param save_if_invalid TRUE to save even if the lock is not saveable (subs NONE lock in place)
  */
-void PersistLock::save(Lock* lock, XmlWriter* writer)
+void PersistLock::save(Lock* lock, XmlWriter* writer, bool save_if_invalid)
 {
-  if(lock->isSaveable())
+  if(lock->isSaveable() || save_if_invalid)
   {
     auto found_type_pair = kTYPE_TO_STRING.find(lock->getType());
     if(found_type_pair == kTYPE_TO_STRING.end())

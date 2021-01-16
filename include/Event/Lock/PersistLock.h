@@ -26,6 +26,7 @@ namespace core
   private:
     /* Data storage key names */
     const static std::string kKEY_TYPE_ITEM;
+    const static std::string kKEY_TYPE_NONE;
     const static std::string kKEY_TYPE_TRIGGER;
 
     /* Lock type enumerator from string key map */
@@ -49,7 +50,7 @@ namespace core
     static Lock* load(Lock* lock, XmlData data, int index);
 
     /* Saves lock data into the XML writer */
-    static void save(Lock* lock, XmlWriter* writer);
+    static void save(Lock* lock, XmlWriter* writer, bool save_if_invalid = false);
   };
 };
 
