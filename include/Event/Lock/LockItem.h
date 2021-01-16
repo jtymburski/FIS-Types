@@ -35,6 +35,7 @@ namespace core
     const static std::string kKEY_ITEM_COUNT;
     const static std::string kKEY_ITEM_ID;
 
+  public:
     /* Unset item ID */
     const static int32_t kUNSET_ITEM_ID = -1;
 
