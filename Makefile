@@ -21,7 +21,7 @@ else
 endif
 
 # Add -g for additional debugging options in 'gdb'
-CFLAGS := -c -std=c++1y -Wextra -Wno-unused-variable -Wno-narrowing
+CFLAGS := -c -std=c++1z -Wextra -Wno-unused-variable -Wno-narrowing
 
 BUILD_DIR := bin
 EXEC_GENERIC := $(BUILD_DIR)/FIST
@@ -35,6 +35,7 @@ SRC_FILE_DIRS := $(SRC_DIR) \
                  $(SRC_DIR)/Event/Conversation \
                  $(SRC_DIR)/Event/Lock \
                  $(SRC_DIR)/Foundation \
+                 $(SRC_DIR)/Map \
                  $(SRC_DIR)/Parser \
                  $(SRC_DIR)/Persistence
 SOURCES := $(foreach dir,$(SRC_FILE_DIRS),$(wildcard $(dir)/*.cc))
