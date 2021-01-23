@@ -65,6 +65,21 @@ const Frame& MapThing::getDialogImage() const
 }
 
 /**
+ * Returns the associated object event, triggered during interaction by the player. If this
+ * implementation does not define the state, it will try and use the base reference object
+ * (template model).
+ * @return event reference
+ */
+const Event& MapThing::getEvent() const
+{
+  if(event)
+    return *event;
+  else if(auto base = base_thing.lock())
+    return base->getEvent();
+  throw std::domain_error("Event is not defined by the map object");
+}
+
+/**
  * Returns the game level reference ID, representing the game-wide class (e.g. Thing). If this
  * implementation does not define the state, it will try and use the base reference object
  * (template model).
@@ -249,6 +264,20 @@ bool MapThing::isDialogImageSet(bool check_base) const
 }
 
 /**
+ * Describes if the associated object event (@link #getEvent()) has been defined.
+ * @param check_base TRUE to also check the base object, FALSE to only check the local version
+ * @return TRUE if the event has been set, FALSE if not
+ */
+bool MapThing::isEventSet(bool check_base) const
+{
+  if(event)
+    return true;
+  else if(auto base = base_thing.lock())
+    return check_base && base->isEventSet();
+  return false;
+}
+
+/**
  * Describes if the game ID (@link #getGameId()) has been defined.
  * @param check_base TRUE to also check the base object, FALSE to only check the local version
  * @return TRUE if the game ID has been set, FALSE if not
@@ -428,6 +457,17 @@ void MapThing::setDialogImage(Frame& dialog_image)
 }
 
 /**
+ * Sets the associated object event, triggered during interaction by the player. See
+ * {@link #getEvent()} for more info. This defines only the current implementation state.
+ * It does not change the base object.
+ * @param event unique pointer reference of the event
+ */
+void MapThing::setEvent(std::unique_ptr<Event> event)
+{
+  this->event = std::move(event);
+}
+
+/**
  * Sets the game level reference ID, representing the game-wide class (e.g. Thing). See
  * {@link #getGameId()} for more info. This defines only the current implementation state.
  * It does not change the base object.
@@ -556,6 +596,15 @@ void MapThing::unsetDescription()
 void MapThing::unsetDialogImage()
 {
   dialog_image.reset();
+}
+
+/**
+ * Unsets the associated object event, triggered during interaction by the player. This
+ * falls back to the base map object, if defined.
+ */
+void MapThing::unsetEvent()
+{
+  event.reset();
 }
 
 /**

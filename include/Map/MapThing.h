@@ -14,6 +14,7 @@
 #include <optional>
 #include <string>
 
+#include "Event/Event.h"
 #include "Foundation/Frame.h"
 #include "Foundation/SpriteMatrix.h"
 #include "Map/MapObjectType.h"
@@ -38,6 +39,9 @@ namespace core
 
     /* Render-ready image info for the dialog snapshot of the object */
     std::optional<Frame> dialog_image;
+
+    /* Object general event, triggered during interaction by the player */
+    std::unique_ptr<Event> event;
 
     /* Game level reference ID. This represents the game wide class, like Thing or Player */
     std::optional<uint32_t> game_id;
@@ -85,6 +89,9 @@ namespace core
     /* Returns the render-ready image info for the dialog snapshot of the object */
     const Frame& getDialogImage() const;
 
+    /* Returns the associated object event, triggered during interaction by the player */
+    const Event& getEvent() const;
+
     /* Returns the game level reference ID, representing the game-wide class (e.g. Thing) */
     uint32_t getGameId() const;
 
@@ -125,6 +132,9 @@ namespace core
     /* Returns if the render-ready image info for the dialog snapshot of the object is set */
     bool isDialogImageSet(bool check_base = true) const;
 
+    /* Returns if the the associated object event is set */
+    bool isEventSet(bool check_base = true) const;
+
     /* Returns if the game level reference ID, representing the game-wide class is set */
     bool isGameIdSet(bool check_base = true) const;
 
@@ -161,6 +171,9 @@ namespace core
 
     /* Sets the render-ready image info for the dialog snapshot of the object */
     void setDialogImage(Frame& dialog_image);
+
+    /* Sets the associated object event, triggered during interaction by the player */
+    void setEvent(std::unique_ptr<Event> event);
 
     /* Sets the game level reference ID, representing the game-wide class (e.g. Thing) */
     void setGameId(uint32_t game_id);
@@ -200,6 +213,9 @@ namespace core
 
     /* Unsets the implementation render-ready image info for the dialog snapshot of the object */
     void unsetDialogImage();
+
+    /* Unsets the associated object event, triggered during interaction by the player */
+    void unsetEvent();
 
     /* Unsets the implementation game level reference ID, representing the game-wide class */
     void unsetGameId();
