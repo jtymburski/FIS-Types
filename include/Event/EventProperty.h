@@ -9,8 +9,8 @@
 #define CORE_EVENTPROPERTY_H
 
 #include <cstdint>
-#include <map>
 #include <string>
+#include <unordered_map>
 
 #include "Event/EventType.h"
 #include "Event/ExecutableEvent.h"
@@ -84,10 +84,10 @@ namespace core
     const static std::string kKEY_TRACKING_NONE;
 
     /* Tracking enumerator from string key map */
-    const static std::map<std::string, Tracking> kTRACKING_FROM_STRING;
+    const static std::unordered_map<std::string, Tracking> kTRACKING_FROM_STRING;
 
     /* Tracking enumerator to string key map */
-    const static std::map<Tracking, std::string> kTRACKING_TO_STRING;
+    const static std::unordered_map<Tracking, std::string> kTRACKING_TO_STRING;
 
   public:
     /* Unset thing ID */

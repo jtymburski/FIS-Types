@@ -28,7 +28,7 @@ const std::string EventProperty::kKEY_TRACKING_NONE = "notrack";
 /**
  * Tracking enumerator from string key static map.
  */
-const std::map<std::string, Tracking> EventProperty::kTRACKING_FROM_STRING = {
+const std::unordered_map<std::string, Tracking> EventProperty::kTRACKING_FROM_STRING = {
   { kKEY_TRACKING_NONE,  Tracking::NONE  },
   { kKEY_TRACKING_AVOID, Tracking::AVOID },
   { kKEY_TRACKING_CHASE, Tracking::CHASE }
@@ -37,7 +37,7 @@ const std::map<std::string, Tracking> EventProperty::kTRACKING_FROM_STRING = {
 /**
  * Tracking enumerator to string key static map.
  */
-const std::map<Tracking, std::string> EventProperty::kTRACKING_TO_STRING = {
+const std::unordered_map<Tracking, std::string> EventProperty::kTRACKING_TO_STRING = {
   { Tracking::NONE,  kKEY_TRACKING_NONE  },
   { Tracking::AVOID, kKEY_TRACKING_AVOID },
   { Tracking::CHASE, kKEY_TRACKING_CHASE }

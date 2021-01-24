@@ -28,7 +28,7 @@ const std::string PersistEvent::kKEY_TYPE_UNLOCKTILE = "unlocktile";
 /**
  * Event type enumerator from string key static map.
  */
-const std::map<std::string, EventType> PersistEvent::kTYPE_FROM_STRING = {
+const std::unordered_map<std::string, EventType> PersistEvent::kTYPE_FROM_STRING = {
   { kKEY_TYPE_BATTLESTART,  EventType::BATTLESTART  },
   { kKEY_TYPE_CONVERSATION, EventType::CONVERSATION },
   { kKEY_TYPE_ITEMGIVE,     EventType::ITEMGIVE     },
@@ -49,7 +49,7 @@ const std::map<std::string, EventType> PersistEvent::kTYPE_FROM_STRING = {
 /**
  * Event type enumerator to string key static map.
  */
-const std::map<EventType, std::string> PersistEvent::kTYPE_TO_STRING = {
+const std::unordered_map<EventType, std::string> PersistEvent::kTYPE_TO_STRING = {
   { EventType::BATTLESTART,  kKEY_TYPE_BATTLESTART  },
   { EventType::CONVERSATION, kKEY_TYPE_CONVERSATION },
   { EventType::ITEMGIVE,     kKEY_TYPE_ITEMGIVE     },

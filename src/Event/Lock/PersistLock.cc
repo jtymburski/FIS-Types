@@ -16,7 +16,7 @@ const std::string PersistLock::kKEY_TYPE_TRIGGER = "trigger";
 /**
  * Lock type enumerator from string key static map.
  */
-const std::map<std::string, LockType> PersistLock::kTYPE_FROM_STRING = {
+const std::unordered_map<std::string, LockType> PersistLock::kTYPE_FROM_STRING = {
   { kKEY_TYPE_ITEM,    LockType::ITEM    },
   { kKEY_TYPE_NONE,    LockType::NONE    },
   { kKEY_TYPE_TRIGGER, LockType::TRIGGER }
@@ -25,7 +25,7 @@ const std::map<std::string, LockType> PersistLock::kTYPE_FROM_STRING = {
 /**
  * Lock type enumerator to string key static map.
  */
-const std::map<LockType, std::string> PersistLock::kTYPE_TO_STRING = {
+const std::unordered_map<LockType, std::string> PersistLock::kTYPE_TO_STRING = {
   { LockType::ITEM,    kKEY_TYPE_ITEM    },
   { LockType::NONE,    kKEY_TYPE_NONE    },
   { LockType::TRIGGER, kKEY_TYPE_TRIGGER }

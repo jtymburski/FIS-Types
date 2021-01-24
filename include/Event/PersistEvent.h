@@ -8,7 +8,7 @@
 #ifndef CORE_PERSISTEVENT_H
 #define CORE_PERSISTEVENT_H
 
-#include <map>
+#include <unordered_map>
 
 #include "Event/Event.h"
 #include "Event/EventBattleStart.h"
@@ -54,10 +54,10 @@ namespace core
     const static std::string kKEY_TYPE_UNLOCKTILE;
 
     /* Event type enumerator from string key map */
-    const static std::map<std::string, EventType> kTYPE_FROM_STRING;
+    const static std::unordered_map<std::string, EventType> kTYPE_FROM_STRING;
 
     /* Event type enumerator to string key map */
-    const static std::map<EventType, std::string> kTYPE_TO_STRING;
+    const static std::unordered_map<EventType, std::string> kTYPE_TO_STRING;
 
   /*=============================================================================
    * PRIVATE STATIC FUNCTIONS

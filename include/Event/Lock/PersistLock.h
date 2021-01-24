@@ -8,7 +8,7 @@
 #ifndef CORE_PERSISTLOCK_H
 #define CORE_PERSISTLOCK_H
 
-#include <map>
+#include <unordered_map>
 
 #include "Event/Lock/Lock.h"
 #include "Event/Lock/LockItem.h"
@@ -30,10 +30,10 @@ namespace core
     const static std::string kKEY_TYPE_TRIGGER;
 
     /* Lock type enumerator from string key map */
-    const static std::map<std::string, LockType> kTYPE_FROM_STRING;
+    const static std::unordered_map<std::string, LockType> kTYPE_FROM_STRING;
 
     /* Lock type enumerator to string key map */
-    const static std::map<LockType, std::string> kTYPE_TO_STRING;
+    const static std::unordered_map<LockType, std::string> kTYPE_TO_STRING;
 
   /*=============================================================================
    * PRIVATE STATIC FUNCTIONS
