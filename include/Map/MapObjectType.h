@@ -13,6 +13,7 @@ namespace core
   enum class MapObjectType : std::uint8_t
   {
     ITEM,
+    PERSON,
     THING
   };
 };

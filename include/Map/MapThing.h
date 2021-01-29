@@ -117,7 +117,7 @@ namespace core
     uint16_t getTileVertical() const;
 
     /* Returns the map object type classification of the implementation */
-    MapObjectType getType() const;
+    virtual MapObjectType getType() const;
 
     /* Returns if the starting map thing is active */
     bool isActive() const;
