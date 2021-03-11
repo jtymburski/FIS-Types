@@ -7,6 +7,7 @@
 #ifndef CORE_CONVERSATIONENTRY_H
 #define CORE_CONVERSATIONENTRY_H
 
+#include <stdexcept>
 #include <string>
 #include <vector>
 
